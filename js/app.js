@@ -7,7 +7,6 @@
   const elements = {
     board: document.getElementById('menu-content'),
     beanList: document.getElementById('beanList'),
-    searchInput: document.getElementById('searchInput'),
     chips: Array.from(document.querySelectorAll('.chip')),
     recipeSheet: document.getElementById('recipeSheet'),
     sheetTitle: document.getElementById('sheetTitle'),
@@ -34,10 +33,6 @@
   function bindEvents() {
     if (elements.themeToggle) {
       elements.themeToggle.addEventListener('click', handleThemeToggle);
-    }
-
-    if (elements.searchInput) {
-      elements.searchInput.addEventListener('input', renderMenus);
     }
 
     elements.chips.forEach(chip => {
@@ -101,21 +96,9 @@
     `).join('');
   }
 
-  function normalizeText(value) {
-    return String(value || '').trim().toLowerCase();
-  }
-
   function getFilteredMenus() {
-    const keyword = normalizeText(elements.searchInput ? elements.searchInput.value : '');
-
     return menuData.filter(item => {
-      const matchesFilter = state.activeFilter === 'ALL' || item.category === state.activeFilter;
-      const matchesSearch =
-        !keyword ||
-        normalizeText(item.titleKo).includes(keyword) ||
-        normalizeText(item.titleEn).includes(keyword);
-
-      return matchesFilter && matchesSearch;
+      return state.activeFilter === 'ALL' || item.category === state.activeFilter;
     });
   }
 
@@ -179,7 +162,7 @@
     if (!groupedMenus.length) {
       elements.board.innerHTML = `
         <div class="panel" style="background: var(--color-surface);">
-          <div class="empty-note">검색 결과가 없습니다.</div>
+          <div class="empty-note">표시할 메뉴가 없습니다.</div>
         </div>
       `;
       return;

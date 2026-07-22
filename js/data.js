@@ -3,113 +3,369 @@ window.menuData = [
     category: "COFFEE",
     titleKo: "아메리카노",
     titleEn: "Americano",
-    price: "4,500",
-    tags: ["HOT", "ICE", "레시피 완료"],
-    description: "진한 에스프레소와 물의 균형.",
     recipe: {
-      summary: "기본 커피 메뉴",
-      ingredients: ["에스프레소 2샷", "정수된 물 180ml", "얼음 120g (ICE 선택 시)"],
-      steps: ["컵 준비", "에스프레소 추출", "물 또는 얼음 추가", "제공 전 표면 정리"]
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "컵에 온수 280ml를 담는다. (온수기 m1 세팅 사용)",
+            "에스프레소 2샷(77ml)을 추출하여 넣는다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "컵에 얼음을 담는다.",
+            "차가운 냉수 200ml를 담는다.",
+            "에스프레소 2샷(77ml)을 추출하여 넣는다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "COFFEE",
     titleKo: "카페라떼",
     titleEn: "Cafe Latte",
-    price: "5,000",
-    tags: ["HOT", "ICE", "레시피 완료"],
-    description: "우유의 질감이 살아있는 기본 라떼.",
     recipe: {
-      summary: "밀크 베이스 라떼",
-      ingredients: ["에스프레소 2샷", "우유 180ml", "얼음 110g (ICE 선택 시)"],
-      steps: ["잔 준비", "에스프레소 추출", "우유 스티밍 또는 냉우유 사용", "비율 맞춰 마무리"]
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "라떼잔에 에스프레소 2샷(72ml)을 직접 추출한다.",
+            "에스프레소 추출과 동시에 스팀밀크 200ml를 준비한다.",
+            "라떼아트로 마무리한다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔에 우유 200ml를 담는다.",
+            "에스프레소 2샷(72ml)을 추출하여 넣는다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "COFFEE",
-    titleKo: "바닐라라떼",
-    titleEn: "Vanilla Latte",
-    price: "5,500",
-    tags: ["HOT", "ICE", "옵션 1"],
-    description: "은은한 바닐라 향이 더해진 시그니처 라떼.",
+    titleKo: "바닐라빈라떼",
+    titleEn: "Vanilla Bean Latte",
     recipe: {
-      summary: "시럽 포함 라떼",
-      ingredients: ["에스프레소 2샷", "바닐라 시럽 20ml", "우유 180ml"],
-      steps: ["컵에 시럽 넣기", "에스프레소 추가", "우유 혼합", "온도 및 층 확인"]
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "라떼잔에 바닐라빈 시럽 30g을 넣는다.",
+            "라떼잔에 에스프레소 2샷(72ml)을 추출한다.",
+            "동시에 스팀밀크 200ml를 준비한다.",
+            "라떼아트로 마무리한다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "계량컵에 바닐라빈 시럽 30g을 넣는다.",
+            "얼음잔에 차가운 우유 200ml를 담는다.",
+            "에스프레소 2샷(72ml)을 추출하여 넣는다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "COFFEE",
     titleKo: "콜드브루",
     titleEn: "Cold Brew",
-    price: "5,300",
-    tags: ["ICE", "레시피 완료"],
-    description: "깊고 부드러운 저온 추출 커피.",
     recipe: {
-      summary: "미리 준비된 추출액 사용",
-      ingredients: ["콜드브루 원액 90ml", "물 120ml", "얼음 120g"],
-      steps: ["컵에 얼음 담기", "원액과 물 순서대로 붓기", "향 유지되도록 가볍게 정리"]
+      sections: [
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔에 차가운 물 200ml를 담는다.",
+            "콜드브루 원액 80g을 넣는다.",
+            "부어 주거나 따로 제공한다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "COFFEE",
+    titleKo: "아포카토",
+    titleEn: "Affogato",
+    recipe: {
+      sections: [
+        {
+          label: "기본",
+          steps: [
+            "바닐라 아이스크림 100g을 예쁘게 컵에 담는다.",
+            "에스프레소 2샷(72ml)을 추출한다.",
+            "에스프레소를 도자기 병에 담아 함께 제공한다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "TEA",
-    titleKo: "얼그레이 티",
-    titleEn: "Earl Grey Tea",
-    price: "4,800",
-    tags: ["HOT", "레시피 완료"],
-    description: "시트러스 향이 맑게 올라오는 홍차.",
+    titleKo: "유자차",
+    titleEn: "Citron Tea",
     recipe: {
-      summary: "티백 또는 찻잎 추출",
-      ingredients: ["얼그레이 티 1개", "온수 220ml"],
-      steps: ["잔 예열", "온수 붓기", "3분 우림", "제공"]
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "아메리카노 잔에 유자청 100g을 넣는다.",
+            "온수를 넣고 섞어준다.",
+            "도자기에 추가 물을 준비한다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔을 준비한다.",
+            "유자청 100g을 넣는다.",
+            "차가운 물을 넣는다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "TEA",
-    titleKo: "캐모마일 티",
-    titleEn: "Chamomile Tea",
-    price: "4,800",
-    tags: ["HOT", "레시피 완료"],
-    description: "부드럽고 편안한 허브티.",
+    titleKo: "레몬차",
+    titleEn: "Lemon Tea",
     recipe: {
-      summary: "허브티 기본 제공",
-      ingredients: ["캐모마일 티 1개", "온수 220ml"],
-      steps: ["잔 준비", "온수 추출", "3~4분 우림", "고객 요청 시 꿀 제공"]
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "아메리카노 잔에 레몬청 85g을 넣는다.",
+            "온수를 넣고 섞어준다.",
+            "도자기에 추가 물을 준비한다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔을 준비한다.",
+            "레몬청 85g을 넣는다.",
+            "차가운 물을 넣는다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "TEA",
+    titleKo: "대추차",
+    titleEn: "Jujube Tea",
+    recipe: {
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "계량컵에 대추원액 110g을 담는다.",
+            "뜨거운 물을 170ml 선까지 추가한다.",
+            "전자레인지에 2분 데워준다.",
+            "도자기에 추가 물을 준비한다.",
+            "잔에 데워진 대추차를 부어준다.",
+            "견과류를 올려준다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "TEA",
+    titleKo: "생강차",
+    titleEn: "Ginger Tea",
+    recipe: {
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "계량컵에 생강원액 85g을 담는다.",
+            "뜨거운 물을 170ml 선까지 추가한다.",
+            "스팀피처에 담아 스팀으로 데워준다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔을 준비한다.",
+            "생강원액 85g을 넣는다.",
+            "차가운 물을 넣는다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "TEA",
+    titleKo: "티백 티",
+    titleEn: "Tea Bag Tea",
+    recipe: {
+      sections: [
+        {
+          label: "종류",
+          steps: [
+            "제주하귤 탱자티",
+            "리치 캐모마일티",
+            "스파이크티",
+            "페퍼민트티",
+            "쟈스민티"
+          ]
+        },
+        {
+          label: "HOT",
+          steps: [
+            "잔에 티백을 담고 뜨거운 물을 넣어 우려준다.",
+            "도자기에 추가 물을 준비한다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "계량컵 스티커 하단까지 뜨거운 물을 넣고 티백을 우려준다.",
+            "음료를 담을 얼음잔과 음료를 식혀내기 위한 얼음잔을 준비한다.",
+            "음료가 완성될 잔에 티백을 옮겨 담는다.",
+            "우러난 뜨거운 차를 식혀내기 위한 얼음잔에 부어 식혀낸다.",
+            "식혀낸 시원한 차를 티백이 담긴 얼음잔에 담아낸다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "DRINK",
-    titleKo: "초콜릿 라떼",
-    titleEn: "Chocolate Latte",
-    price: "5,800",
-    tags: ["HOT", "ICE", "옵션 2"],
-    description: "진한 초콜릿 풍미와 우유의 밸런스.",
+    titleKo: "오곡라떼",
+    titleEn: "Five Grain Latte",
     recipe: {
-      summary: "초코 파우더 베이스",
-      ingredients: ["초코 파우더 30g", "우유 190ml", "휘핑 옵션 가능"],
-      steps: ["파우더와 베이스 혼합", "우유 스티밍 또는 냉우유 사용", "필요 시 휘핑 추가"]
+      sections: [
+        {
+          label: "HOT",
+          steps: [
+            "계량컵에 뜨거운 물 50ml를 준비한다.",
+            "오곡파우더 30g을 넣고 섞어준다.",
+            "스팀밀크 200ml를 만든다.",
+            "물에 녹인 오곡파우더를 넣는다."
+          ]
+        },
+        {
+          label: "ICE",
+          steps: [
+            "에어디스크 컨테이너에 우유 200ml를 넣는다.",
+            "오곡파우더 30g을 넣는다.",
+            "블렌더 3번 모드로 작동한다.",
+            "얼음잔에 담는다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "DRINK",
-    titleKo: "말차라떼",
-    titleEn: "Matcha Latte",
-    price: "6,000",
-    tags: ["HOT", "ICE", "레시피 완료"],
-    description: "말차의 쌉쌀함과 우유의 고소함.",
+    titleKo: "딸기라떼",
+    titleEn: "Strawberry Latte",
     recipe: {
-      summary: "말차 파우더 베이스",
-      ingredients: ["말차 파우더 25g", "우유 190ml", "시럽 10ml 선택 가능"],
-      steps: ["파우더 충분히 풀기", "우유 혼합", "온도 맞춰 마무리", "분말 뭉침 체크"]
+      sections: [
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔을 준비한다.",
+            "딸기청 80g을 넣는다.",
+            "차가운 우유 200ml를 넣어준다."
+          ]
+        }
+      ]
     }
   },
   {
     category: "DRINK",
-    titleKo: "레몬에이드",
-    titleEn: "Lemon Ade",
-    price: "5,700",
-    tags: ["ICE", "레시피 미등록"],
-    description: "가볍고 상큼한 탄산 음료.",
-    recipe: null
+    titleKo: "에이드",
+    titleEn: "Ade",
+    recipe: {
+      sections: [
+        {
+          label: "ICE",
+          steps: [
+            "얼음잔을 준비한다.",
+            "과일청 80g을 넣는다.",
+            "시원한 탄산수를 만들어 넣어준다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "DRINK",
+    titleKo: "망고스무디",
+    titleEn: "Mango Smoothie",
+    recipe: {
+      sections: [
+        {
+          label: "ICE",
+          steps: [
+            "블렌더 컨테이너에 물 100ml를 넣는다.",
+            "망고시럽 80g, 냉동망고 50g, 얼음 180g을 넣는다.",
+            "블렌더 1번 모드로 갈아준다.",
+            "아이스잔에 담는다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "DRINK",
+    titleKo: "홍시스무디",
+    titleEn: "Sweet Persimmon Smoothie",
+    recipe: {
+      sections: [
+        {
+          label: "ICE",
+          steps: [
+            "블렌더 컨테이너에 물 100ml를 넣는다.",
+            "홍시청 80g, 냉동홍시 2조각, 카페 시럽 20g, 얼음 180g을 넣는다.",
+            "블렌더 1번 모드로 갈아준다.",
+            "아이스잔에 담는다."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    category: "DRINK",
+    titleKo: "수박쥬스",
+    titleEn: "Watermelon Juice",
+    recipe: {
+      sections: [
+        {
+          label: "ICE",
+          steps: [
+            "블렌더 컨테이너에 물 50ml를 넣는다.",
+            "냉장수박 140g, 냉동수박 200g을 넣는다.",
+            "블렌더 1번 모드로 갈아준다.",
+            "아이스잔에 담는다."
+          ]
+        }
+      ]
+    }
+  }
+];
+
+window.beanInfo = [
+  {
+    name: "짙은",
+    description: "브라질·콜롬비아 기반의 미디엄 다크 블렌드로, 아몬드·브라운 슈거·초콜릿 느낌에 묵직한 바디감이 특징입니다."
+  },
+  {
+    name: "산들",
+    description: "에티오피아 기반의 미디엄 라이트 블렌드로, 딸기·블루베리·홍차 같은 산뜻한 풍미와 깔끔한 피니시가 특징입니다."
+  },
+  {
+    name: "고요",
+    description: "디카페인 블렌드로, 다크초콜릿·호박엿·군고구마 같은 고소한 맛에 쥬시한 마무리가 어우러집니다."
   }
 ];

@@ -1,0 +1,307 @@
+[
+  {
+    "id": "coffee-americano",
+    "category": "COFFEE",
+    "name_ko": "아메리카노",
+    "name_en": "americano",
+    "price": 4.5,
+    "options": [
+      "산들",
+      "짙은",
+      "디카페인 +1.0"
+    ],
+    "description": "기록의 기본 커피 메뉴",
+    "recipe": "매장/TO GO 동일\nHOT : 에스프레소 2샷(77ml) + 온수 M1 셋팅 (280ml)\nICE : 에스프레소 2샷(77ml) + 차가운 물 (200ml)",
+    "notes": "원두 선택 가능: 산들 / 짙은 / 디카페인 +1.0",
+    "visible": true
+  },
+  {
+    "id": "coffee-cafe-latte",
+    "category": "COFFEE",
+    "name_ko": "카페라떼",
+    "name_en": "cafe latte",
+    "price": 5.0,
+    "options": [
+      "산들",
+      "짙은",
+      "디카페인 +1.0"
+    ],
+    "description": "우유와 에스프레소의 균형",
+    "recipe": "매장/TO GO 동일\nHOT : 라떼잔에 에스프레소 2샷(72ml) + 스팀밀크 200ml\nICE : 차가운 우유 200ml + 얼음 + 에스프레소 2샷(72ml)",
+    "notes": "원두 선택 가능: 산들 / 짙은 / 디카페인 +1.0",
+    "visible": true
+  },
+  {
+    "id": "coffee-vanilla-bean-latte",
+    "category": "COFFEE",
+    "name_ko": "바닐라빈 라떼",
+    "name_en": "vanilla bean latte",
+    "price": 5.6,
+    "options": [
+      "산들",
+      "짙은",
+      "디카페인 +1.0"
+    ],
+    "description": "바닐라빈 시럽이 들어간 시그니처 라떼",
+    "recipe": "HOT : 라떼잔에 바닐라빈 시럽 30g + 에스프레소 2샷(72ml) + 스팀밀크 200ml\nICE : 계량컵에 바닐라빈 시럽 30g + 차가운 우유 200ml선까지 + 에스프레소 2샷(72ml)",
+    "notes": "원두 선택 가능: 산들 / 짙은 / 디카페인 +1.0",
+    "visible": true
+  },
+  {
+    "id": "coffee-cold-brew",
+    "category": "COFFEE",
+    "name_ko": "콜드브루",
+    "name_en": "cold brew",
+    "price": 5.0,
+    "options": [],
+    "description": "부드럽고 깔끔한 콜드브루",
+    "recipe": "ICE : 차가운 물(200ml) + 콜드브루 원액(80g)",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "coffee-affogato",
+    "category": "COFFEE",
+    "name_ko": "아포가토",
+    "name_en": "affogato",
+    "price": 6.0,
+    "options": [],
+    "description": "에스프레소와 아이스크림",
+    "recipe": "ICE : 바닐라아이스크림(100g) + 에스프레소 2샷(72ml)",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "coffee-blend-sandeul",
+    "category": "COFFEE BEANS",
+    "name_ko": "산들 [블렌딩]",
+    "name_en": "sandeul blend",
+    "price": null,
+    "options": [],
+    "description": "에티오피아 예가체프 G1 내추럴 60%, 에티오피아 시다마 G1 워시드 40%",
+    "recipe": "원두 안내용 항목",
+    "notes": "노트: 딸기, 블루베리, 블랙티, 티라이크하며 깔끔한 뒷맛과 꽃이감.",
+    "visible": true
+  },
+  {
+    "id": "coffee-blend-jiteun",
+    "category": "COFFEE BEANS",
+    "name_ko": "짙은 [블렌딩]",
+    "name_en": "jiteun blend",
+    "price": null,
+    "options": [],
+    "description": "브라질 내추럴 60%, 콜롬비아 후일라 워시드 40%",
+    "recipe": "원두 안내용 항목",
+    "notes": "노트: 아몬드, 브라운슈가, 초콜릿, 고소하며 묵직한 바디감.",
+    "visible": true
+  },
+  {
+    "id": "tea-yuja",
+    "category": "TEA",
+    "name_ko": "유자차",
+    "name_en": "yuza tea",
+    "price": 5.0,
+    "options": [],
+    "description": "상큼한 유자차",
+    "recipe": "HOT : 유자청 100g + 온수 + 도자기에 따뜻한물\nICE : 얼음 + 유자청 100g + 차가운물",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-lemon",
+    "category": "TEA",
+    "name_ko": "레몬차",
+    "name_en": "lemon tea",
+    "price": 5.0,
+    "options": [],
+    "description": "산뜻한 레몬차",
+    "recipe": "HOT : 레몬청 85g + 온수 + 도자기에 따뜻한물\nICE : 얼음 + 레몬청 85g + 차가운 물",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-jujube",
+    "category": "TEA",
+    "name_ko": "수제 대추차",
+    "name_en": "jujube tea",
+    "price": 7.0,
+    "options": [],
+    "description": "수제 대추 베이스",
+    "recipe": "HOT : 계량컵에 대추원액 110g + 뜨거운물 170ml 선까지 + 전자레인지 2분 + 견가류 데코",
+    "notes": "HOT 전용",
+    "visible": true
+  },
+  {
+    "id": "tea-ginger",
+    "category": "TEA",
+    "name_ko": "수제 생강차",
+    "name_en": "ginger tea",
+    "price": 7.0,
+    "options": [],
+    "description": "수제 생강 베이스",
+    "recipe": "HOT : 계량컵에 생강원액 85g + 뜨거운물 170ml 선까지 + 스팀피처에 스팀\nICE : 얼음 + 생강원액 85g + 차가운물",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-jeju-citrus",
+    "category": "TEA",
+    "name_ko": "제주하귤, 탱자티",
+    "name_en": "jeju summer tangerine",
+    "price": 4.5,
+    "options": [],
+    "description": "제주 citrus tea",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-lychee-chamomile",
+    "category": "TEA",
+    "name_ko": "리치 캐모마일티",
+    "name_en": "lychee chamomile",
+    "price": 4.5,
+    "options": [],
+    "description": "리치와 캐모마일 블렌드",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-spike",
+    "category": "TEA",
+    "name_ko": "스파이크티",
+    "name_en": "instead of coffee",
+    "price": 4.5,
+    "options": [],
+    "description": "커피 대신 선택하는 티",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-peppermint",
+    "category": "TEA",
+    "name_ko": "페퍼민트티",
+    "name_en": "peppermint",
+    "price": 4.0,
+    "options": [],
+    "description": "시원한 허브티",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "tea-jasmine",
+    "category": "TEA",
+    "name_ko": "자스민티",
+    "name_en": "jasmine",
+    "price": 5.0,
+    "options": [],
+    "description": "은은한 꽃향의 티",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "drink-latte-five-grains-strawberry",
+    "category": "DRINK",
+    "name_ko": "라떼 [논커피]",
+    "name_en": "five grains / strawberry",
+    "price": 5.5,
+    "options": [
+      "오곡",
+      "딸기"
+    ],
+    "description": "논커피 라떼 메뉴",
+    "recipe": "오곡라떼\nHOT : 계량컵에 뜨거운 물(50ml) + 오곡파우더 30g + 스팀밀크 200ml + 오곡파우더 체치기\nICE : 폼 그라인더에 우유 200ml + 오곡파우더 30g + 얼음\n\n딸기라떼\nICE : 얼음 + 딸기청 80g + 차가운 우유 200ml",
+    "notes": "옵션: 오곡 / 딸기",
+    "visible": true
+  },
+  {
+    "id": "drink-ade-handmade",
+    "category": "DRINK",
+    "name_ko": "에이드 [수제청]",
+    "name_en": "handmade ade",
+    "price": 6.0,
+    "options": [
+      "유자",
+      "레몬",
+      "자몽",
+      "샤인머스켓"
+    ],
+    "description": "수제청 에이드",
+    "recipe": "ICE : 과일청 80g + 탄산수",
+    "notes": "옵션: 유자 / 레몬 / 자몽 / 샤인머스켓",
+    "visible": true
+  },
+  {
+    "id": "drink-blended",
+    "category": "DRINK",
+    "name_ko": "블렌디드",
+    "name_en": "mango, persimmon",
+    "price": 6.0,
+    "options": [
+      "망고 스무디",
+      "홍시 스무디"
+    ],
+    "description": "블렌디드 스무디",
+    "recipe": "망고스무디(블렌더 1번)\nICE : 블렌더 계량컵에 물 100ml + 망고시럽 80g + 냉동망고 50g + 얼음 180g\n\n홍시스무디(블렌더 1번)\nICE : 블렌더 계량컵에 물 100ml + 홍시청 80g + 냉동홍시 2조각 + 시럽 20g + 얼음 180g",
+    "notes": "옵션: 망고 스무디 / 홍시 스무디",
+    "visible": true
+  },
+  {
+    "id": "drink-watermelon-juice",
+    "category": "DRINK",
+    "name_ko": "수박 주스",
+    "name_en": "watermelon juice",
+    "price": 6.0,
+    "options": [],
+    "description": "시즌 주스",
+    "recipe": "ICE : 블렌더 계량컵에 물 50ml + 냉장수박 140g + 냉동수박 200g",
+    "notes": "블렌더 1번",
+    "visible": true
+  },
+  {
+    "id": "drink-vanilla-ice-cream",
+    "category": "DRINK",
+    "name_ko": "바닐라 아이스크림",
+    "name_en": "vanilla ice cream",
+    "price": 5.0,
+    "options": [],
+    "description": "디저트 메뉴",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "drink-bottle",
+    "category": "DRINK",
+    "name_ko": "병 음료",
+    "name_en": "rtd",
+    "price": 3.0,
+    "options": [
+      "애플 스파클링",
+      "애플 주스"
+    ],
+    "description": "병 음료",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  },
+  {
+    "id": "drink-kids",
+    "category": "DRINK",
+    "name_ko": "어린이",
+    "name_en": "kids",
+    "price": 3.0,
+    "options": [
+      "우유",
+      "뽀로로(딸기, 사과, 밀크)"
+    ],
+    "description": "어린이 메뉴",
+    "recipe": "레시피 입력 예정",
+    "notes": "",
+    "visible": true
+  }
+]

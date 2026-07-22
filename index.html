@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Girok Menu Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root, [data-theme="light"] {
+      --bg: #f4f1e8;
+      --surface: #fffaf0;
+      --surface-2: #ede8dd;
+      --text: #161616;
+      --muted: #5f5a52;
+      --border: rgba(22,22,22,.12);
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --coffee: #ff8c5b;
+      --tea: #aab79b;
+      --drink: #f5efe3;
+      --accent: #d8ff31;
+    }
+    [data-theme="dark"] {
+      --bg: #141414;
+      --surface: #1b1b1b;
+      --surface-2: #262626;
+      --text: #f6f3eb;
+      --muted: #c1b9ab;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 16px 40px rgba(0,0,0,.35);
+      --coffee: #6d3a27;
+      --tea: #495743;
+      --drink: #35312a;
+      --accent: #d8ff31;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    button { font: inherit; }
+    .app {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 104px 1fr;
+    }
+    .brand {
+      background: #050505;
+      color: #fff;
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+    }
+    .logo {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.08em;
+      line-height: .9;
+      position: relative;
+    }
+    .logo .dot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--accent);
+      margin: 12px auto 0;
+    }
+    .brand-meta {
+      font-size: .92rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,.85);
+    }
+    .main {
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 8px 0 14px;
+      backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+    }
+    .title-wrap h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2vw, 2.2rem);
+      letter-spacing: -0.05em;
+    }
+    .title-wrap p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .panel {
+      min-height: calc(100dvh - 92px);
+      border-radius: 22px;
+      padding: 24px 20px 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .panel.coffee { background: var(--coffee); }
+    .panel.tea { background: var(--tea); }
+    .panel.drink { background: var(--drink); }
+    .panel h2 {
+      margin: 0 0 18px;
+      font-size: clamp(2rem, 4vw, 3.75rem);
+      letter-spacing: -0.06em;
+      line-height: .95;
+    }
+    .panel-note {
+      margin-bottom: 22px;
+      font-size: 1rem;
+      max-width: 32ch;
+    }
+    .menu-list {
+      display: grid;
+      gap: 10px;
+    }
+    .menu-item {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      border-radius: 16px;
+      padding: 10px 0;
+      color: inherit;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      cursor: pointer;
+    }
+    .menu-item:hover,
+    .menu-item:focus-visible {
+      background: rgba(255,255,255,.18);
+      padding-inline: 10px;
+      outline: none;
+    }
+    .item-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .name-ko {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .name-en,
+    .option-line,
+    .item-note {
+      font-size: .9rem;
+      color: rgba(0,0,0,.72);
+    }
+    [data-theme="dark"] .name-en,
+    [data-theme="dark"] .option-line,
+    [data-theme="dark"] .item-note {
+      color: rgba(255,255,255,.76);
+    }
+    .price {
+      font-weight: 700;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+    .bean-box {
+      margin-top: 24px;
+      display: grid;
+      gap: 14px;
+    }
+    .bean-card {
+      border: 1px solid rgba(0,0,0,.1);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.22);
+    }
+    [data-theme="dark"] .bean-card {
+      border-color: rgba(255,255,255,.14);
+      background: rgba(0,0,0,.14);
+    }
+    .bean-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+    .bean-card p {
+      margin: 0;
+      font-size: .92rem;
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(0,0,0,.5);
+      padding: 18px;
+      z-index: 100;
+    }
+    .modal.open { display: grid; }
+    .modal-card {
+      width: min(680px, 100%);
+      max-height: 88dvh;
+      overflow: auto;
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+    .modal-top h3 {
+      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: -0.04em;
+    }
+    .modal-top p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+    .close-btn {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      cursor: pointer;
+    }
+    .modal-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .modal-section {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      background: var(--surface-2);
+    }
+    .modal-section h4 {
+      margin: 0 0 8px;
+      font-size: .95rem;
+    }
+    .modal-section p {
+      margin: 0;
+      white-space: pre-line;
+    }
+    .hint {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .brand {
+        position: static;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: end;
+      }
+      .logo {
+        writing-mode: horizontal-tb;
+        transform: none;
+        font-size: 3.2rem;
+      }
+      .board { grid-template-columns: 1fr; }
+      .panel { min-height: auto; }
+    }
+    @media (max-width: 640px) {
+      .main { padding: 12px; }
+      .topbar { align-items: start; flex-direction: column; }
+      .panel { padding: 18px 16px 22px; border-radius: 18px; }
+      .panel h2 { font-size: 2.4rem; }
+      .menu-item:hover,
+      .menu-item:focus-visible { padding-inline: 0; }
+      .modal-card { padding: 18px; border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="brand">
+      <div class="logo" aria-label="girok">girok<span class="dot"></span></div>
+      <div class="brand-meta">
+        <div>예금주 강채현</div>
+        <div>농협 352 2281 4064 13</div>
+        <br />
+        <div>테이크 아웃 -0.5</div>
+        <div>에스프레소 샷추가 +1.0</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="title-wrap">
+          <h1>Menu Board Web App</h1>
+          <p>메뉴를 선택하면 레시피와 운영 메모가 팝업으로 열립니다.</p>
+        </div>
+        <div class="actions">
+          <button class="btn" data-theme-toggle aria-label="다크모드 전환">다크모드</button>
+        </div>
+      </div>
+
+      <section class="board" id="board"></section>
+    </main>
+  </div>
+
+  <div class="modal" id="recipeModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-top">
+        <div>
+          <h3 id="modalTitle">메뉴명</h3>
+          <p id="modalSubtitle">영문명 · 가격</p>
+        </div>
+        <button class="close-btn" id="closeModal" aria-label="팝업 닫기">✕</button>
+      </div>
+      <div class="modal-grid">
+        <section class="modal-section">
+          <h4>설명</h4>
+          <p id="modalDescription"></p>
+        </section>
+        <section class="modal-section">
+          <h4>옵션</h4>
+          <p id="modalOptions"></p>
+        </section>
+        <section class="modal-section">
+          <h4>레시피</h4>
+          <p id="modalRecipe"></p>
+        </section>
+        <section class="modal-section">
+          <h4>운영 메모</h4>
+          <p id="modalNotes"></p>
+        </section>
+      </div>
+      <p class="hint">일부 메뉴는 현재 전달받은 레시피만 연결되어 있습니다. 나머지 메뉴도 같은 방식으로 계속 확장할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <script>
+    const menuData = [
+  {
+    "id": "coffee-americano",
+    "category": "COFFEE",
+    "name_ko": "아메리카노",
+    "name_en": "americano",
+    "price": 4.5,
+    "options": [
+      "산들",
+      "짙은",
+      "디카페인 +1.0"
+    ],
+    "description": "기록의 기본 커피 메뉴",
+    "recipe": "매장/TO GO 동일
+HOT : 에스프레소 2샷(77ml) + 온수 M1 셋팅 (280ml)
+ICE : 에스프레소 2샷(77ml) + 차가운 물 (200ml)",
+    "notes": "원두 선택 가능: 산들 / 짙은 / 디카페인 +1.0"
+  },
+  {
+    "id": "coffee-cafe-latte",
+    "category": "COFFEE",
+    "name_ko": "카페라떼",
+    "name_en": "cafe latte",
+    "price": 5.0,
+    "options": [
+      "산들",
+      "짙은",
+      "디카페인 +1.0"
+    ],
+    "description": "우유와 에스프레소의 균형",
+    "recipe": "매장/TO GO 동일
+HOT : 라떼잔에 에스프레소 2샷(72ml) + 스팀밀크 200ml
+ICE : 차가운 우유 200ml + 얼음 + 에스프레소 2샷(72ml)",
+    "notes": "원두 선택 가능: 산들 / 짙은 / 디카페인 +1.0"
+  },
+  {
+    "id": "coffee-vanilla-bean-latte",
+    "category": "COFFEE",
+    "name_ko": "바닐라빈 라떼",
+    "name_en": "vanilla bean latte",
+    "price": 5.6,
+    "options": [
+      "산들",
+      "짙은",
+      "디카페인 +1.0"
+    ],
+    "description": "바닐라빈 시럽이 들어간 시그니처 라떼",
+    "recipe": "HOT : 라떼잔에 바닐라빈 시럽 30g + 에스프레소 2샷(72ml) + 스팀밀크 200ml
+ICE : 계량컵에 바닐라빈 시럽 30g + 차가운 우유 200ml선까지 + 에스프레소 2샷(72ml)",
+    "notes": "원두 선택 가능: 산들 / 짙은 / 디카페인 +1.0"
+  },
+  {
+    "id": "coffee-cold-brew",
+    "category": "COFFEE",
+    "name_ko": "콜드브루",
+    "name_en": "cold brew",
+    "price": 5.0,
+    "options": [],
+    "description": "부드럽고 깔끔한 콜드브루",
+    "recipe": "ICE : 차가운 물(200ml) + 콜드브루 원액(80g)",
+    "notes": ""
+  },
+  {
+    "id": "coffee-affogato",
+    "category": "COFFEE",
+    "name_ko": "아포가토",
+    "name_en": "affogato",
+    "price": 6.0,
+    "options": [],
+    "description": "에스프레소와 아이스크림",
+    "recipe": "ICE : 바닐라아이스크림(100g) + 에스프레소 2샷(72ml)",
+    "notes": ""
+  },
+  {
+    "id": "tea-yuja",
+    "category": "TEA",
+    "name_ko": "유자차",
+    "name_en": "yuza tea",
+    "price": 5.0,
+    "options": [],
+    "description": "상큼한 유자차",
+    "recipe": "HOT : 유자청 100g + 온수 + 도자기에 따뜻한물
+ICE : 얼음 + 유자청 100g + 차가운물",
+    "notes": ""
+  },
+  {
+    "id": "tea-lemon",
+    "category": "TEA",
+    "name_ko": "레몬차",
+    "name_en": "lemon tea",
+    "price": 5.0,
+    "options": [],
+    "description": "산뜻한 레몬차",
+    "recipe": "HOT : 레몬청 85g + 온수 + 도자기에 따뜻한물
+ICE : 얼음 + 레몬청 85g + 차가운 물",
+    "notes": ""
+  },
+  {
+    "id": "tea-jujube",
+    "category": "TEA",
+    "name_ko": "수제 대추차",
+    "name_en": "jujube tea",
+    "price": 7.0,
+    "options": [],
+    "description": "수제 대추 베이스",
+    "recipe": "HOT : 계량컵에 대추원액 110g + 뜨거운물 170ml 선까지 + 전자레인지 2분 + 견가류 데코",
+    "notes": "HOT 전용"
+  },
+  {
+    "id": "tea-ginger",
+    "category": "TEA",
+    "name_ko": "수제 생강차",
+    "name_en": "ginger tea",
+    "price": 7.0,
+    "options": [],
+    "description": "수제 생강 베이스",
+    "recipe": "HOT : 계량컵에 생강원액 85g + 뜨거운물 170ml 선까지 + 스팀피처에 스팀
+ICE : 얼음 + 생강원액 85g + 차가운물",
+    "notes": ""
+  },
+  {
+    "id": "tea-jeju-citrus",
+    "category": "TEA",
+    "name_ko": "제주하귤, 탱자티",
+    "name_en": "jeju summer tangerine",
+    "price": 4.5,
+    "options": [],
+    "description": "제주 citrus tea",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "tea-lychee-chamomile",
+    "category": "TEA",
+    "name_ko": "리치 캐모마일티",
+    "name_en": "lychee chamomile",
+    "price": 4.5,
+    "options": [],
+    "description": "리치와 캐모마일 블렌드",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "tea-spike",
+    "category": "TEA",
+    "name_ko": "스파이크티",
+    "name_en": "instead of coffee",
+    "price": 4.5,
+    "options": [],
+    "description": "커피 대신 선택하는 티",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "tea-peppermint",
+    "category": "TEA",
+    "name_ko": "페퍼민트티",
+    "name_en": "peppermint",
+    "price": 4.0,
+    "options": [],
+    "description": "시원한 허브티",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "tea-jasmine",
+    "category": "TEA",
+    "name_ko": "자스민티",
+    "name_en": "jasmine",
+    "price": 5.0,
+    "options": [],
+    "description": "은은한 꽃향의 티",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "drink-latte-five-grains-strawberry",
+    "category": "DRINK",
+    "name_ko": "라떼 [논커피]",
+    "name_en": "five grains / strawberry",
+    "price": 5.5,
+    "options": [
+      "오곡",
+      "딸기"
+    ],
+    "description": "논커피 라떼 메뉴",
+    "recipe": "오곡라떼
+HOT : 계량컵에 뜨거운 물(50ml) + 오곡파우더 30g + 스팀밀크 200ml + 오곡파우더 체치기
+ICE : 폼 그라인더에 우유 200ml + 오곡파우더 30g + 얼음
+
+딸기라떼
+ICE : 얼음 + 딸기청 80g + 차가운 우유 200ml",
+    "notes": "옵션: 오곡 / 딸기"
+  },
+  {
+    "id": "drink-ade-handmade",
+    "category": "DRINK",
+    "name_ko": "에이드 [수제청]",
+    "name_en": "handmade ade",
+    "price": 6.0,
+    "options": [
+      "유자",
+      "레몬",
+      "자몽",
+      "샤인머스켓"
+    ],
+    "description": "수제청 에이드",
+    "recipe": "ICE : 과일청 80g + 탄산수",
+    "notes": "옵션: 유자 / 레몬 / 자몽 / 샤인머스켓"
+  },
+  {
+    "id": "drink-blended",
+    "category": "DRINK",
+    "name_ko": "블렌디드",
+    "name_en": "mango, persimmon",
+    "price": 6.0,
+    "options": [
+      "망고 스무디",
+      "홍시 스무디"
+    ],
+    "description": "블렌디드 스무디",
+    "recipe": "망고스무디(블렌더 1번)
+ICE : 블렌더 계량컵에 물 100ml + 망고시럽 80g + 냉동망고 50g + 얼음 180g
+
+홍시스무디(블렌더 1번)
+ICE : 블렌더 계량컵에 물 100ml + 홍시청 80g + 냉동홍시 2조각 + 시럽 20g + 얼음 180g",
+    "notes": "옵션: 망고 스무디 / 홍시 스무디"
+  },
+  {
+    "id": "drink-watermelon-juice",
+    "category": "DRINK",
+    "name_ko": "수박 주스",
+    "name_en": "watermelon juice",
+    "price": 6.0,
+    "options": [],
+    "description": "시즌 주스",
+    "recipe": "ICE : 블렌더 계량컵에 물 50ml + 냉장수박 140g + 냉동수박 200g",
+    "notes": "블렌더 1번"
+  },
+  {
+    "id": "drink-vanilla-ice-cream",
+    "category": "DRINK",
+    "name_ko": "바닐라 아이스크림",
+    "name_en": "vanilla ice cream",
+    "price": 5.0,
+    "options": [],
+    "description": "디저트 메뉴",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "drink-bottle",
+    "category": "DRINK",
+    "name_ko": "병 음료",
+    "name_en": "rtd",
+    "price": 3.0,
+    "options": [
+      "애플 스파클링",
+      "애플 주스"
+    ],
+    "description": "병 음료",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  },
+  {
+    "id": "drink-kids",
+    "category": "DRINK",
+    "name_ko": "어린이",
+    "name_en": "kids",
+    "price": 3.0,
+    "options": [
+      "우유",
+      "뽀로로(딸기, 사과, 밀크)"
+    ],
+    "description": "어린이 메뉴",
+    "recipe": "레시피 입력 예정",
+    "notes": ""
+  }
+];
+
+    const beanInfo = [
+      {
+        title: '산들 [블렌딩]',
+        text: '에티오피아 예가체프 G1 내추럴 60%\n에티오피아 시다마 G1 워시드 40%\n\n노트: 딸기, 블루베리, 블랙티, 티라이크하며 깔끔한 뒷맛과 꽃이감.'
+      },
+      {
+        title: '짙은 [블렌딩]',
+        text: '브라질 내추럴 60%\n콜롬비아 후일라 워시드 40%\n\n노트: 아몬드, 브라운슈가, 초콜릿, 고소하며 묵직한 바디감.'
+      }
+    ];
+
+    const panelMeta = {
+      COFFEE: {
+        className: 'coffee',
+        note: '커피 모든 메뉴 원두 선택 가능. 산들 / 짙은 / 디카페인 +1.0'
+      },
+      TEA: {
+        className: 'tea',
+        note: ''
+      },
+      DRINK: {
+        className: 'drink',
+        note: ''
+      }
+    };
+
+    const board = document.getElementById('board');
+    const modal = document.getElementById('recipeModal');
+    const closeModal = document.getElementById('closeModal');
+
+    function priceText(value) {
+      return typeof value === 'number' ? value.toFixed(1) : '—';
+    }
+
+    function createMenuItem(item) {
+      const button = document.createElement('button');
+      button.className = 'menu-item';
+      button.type = 'button';
+      button.innerHTML = `
+        <div class="item-head">
+          <div>
+            <div class="name-ko">${item.name_ko}</div>
+            <div class="name-en">${item.name_en || ''}</div>
+            ${item.options?.length ? `<div class="option-line">${item.options.join(' / ')}</div>` : ''}
+          </div>
+          <div class="price">${priceText(item.price)}</div>
+        </div>
+      `;
+      button.addEventListener('click', () => openRecipe(item));
+      return button;
+    }
+
+    function createPanel(category, items) {
+      const panel = document.createElement('section');
+      panel.className = `panel ${panelMeta[category].className}`;
+      panel.innerHTML = `
+        <h2>${category}</h2>
+        ${panelMeta[category].note ? `<p class="panel-note">${panelMeta[category].note}</p>` : ''}
+        <div class="menu-list"></div>
+      `;
+      const list = panel.querySelector('.menu-list');
+      items.forEach(item => list.appendChild(createMenuItem(item)));
+
+      if (category === 'COFFEE') {
+        const beanBox = document.createElement('div');
+        beanBox.className = 'bean-box';
+        beanInfo.forEach(bean => {
+          const card = document.createElement('article');
+          card.className = 'bean-card';
+          card.innerHTML = `<h3>${bean.title}</h3><p>${bean.text.replaceAll('\n', '<br>')}</p>`;
+          beanBox.appendChild(card);
+        });
+        panel.appendChild(beanBox);
+      }
+      return panel;
+    }
+
+    function renderBoard() {
+      ['COFFEE', 'TEA', 'DRINK'].forEach(category => {
+        const items = menuData.filter(item => item.category === category);
+        board.appendChild(createPanel(category, items));
+      });
+    }
+
+    function openRecipe(item) {
+      document.getElementById('modalTitle').textContent = item.name_ko;
+      document.getElementById('modalSubtitle').textContent = `${item.name_en || ''} · ${priceText(item.price)}`;
+      document.getElementById('modalDescription').textContent = item.description || '설명 없음';
+      document.getElementById('modalOptions').textContent = item.options?.length ? item.options.join(', ') : '옵션 없음';
+      document.getElementById('modalRecipe').textContent = item.recipe || '레시피 없음';
+      document.getElementById('modalNotes').textContent = item.notes || '메모 없음';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function hideModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    closeModal.addEventListener('click', hideModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) hideModal();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideModal();
+    });
+
+    (function(){
+      const toggle=document.querySelector('[data-theme-toggle]');
+      const root=document.documentElement;
+      let mode=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+      root.setAttribute('data-theme',mode);
+      toggle.addEventListener('click',()=>{
+        mode=mode==='dark'?'light':'dark';
+        root.setAttribute('data-theme',mode);
+      });
+    })();
+
+    renderBoard();
+  </script>
+</body>
+</html>

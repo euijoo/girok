@@ -7,24 +7,29 @@
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-  <div class="app-shell">
+  <!-- 시작 스플래시: girokrecipebook.jpg -->
+  <div class="splash" id="splash">
+    <button class="splash-hit-area" id="enterButton" type="button" aria-label="레시피 북 열기">
+      <div class="splash-image-frame"></div>
+    </button>
+  </div>
+
+  <!-- 실제 메인 앱: 처음엔 hidden -->
+  <div class="app-shell" hidden>
     <header class="hero">
       <section class="brand-card">
         <div class="brand-top">
           <div class="brand-mark">
-            <span>GIROK</span>
-            <span class="dot"></span>
+            <span>GIROK</span><span class="dot"></span>
           </div>
           <button class="theme-toggle" type="button" data-theme-toggle aria-label="다크 모드 전환">
             ◐
           </button>
         </div>
-
         <div class="hero-copy">
           <h1>카페 기록 메뉴 & 레시피</h1>
           <p>휴대폰, 패드, PC에서 모두 보기 좋은 반응형 메뉴판입니다.</p>
         </div>
-
         <div class="hero-meta">
           <div class="meta-card">
             <strong id="totalCount">0개 메뉴</strong>
@@ -54,12 +59,11 @@
     <main id="menu-content" class="board"></main>
   </div>
 
-  <!-- A KEEN 스타일 풀스크린 팝업 -->
+  <!-- A KEEN 스타일 풀스크린 레시피 팝업 -->
   <div class="sheet sheet--full" id="recipeSheet" aria-hidden="true">
     <div class="sheet-backdrop" data-close-sheet></div>
 
     <section class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-      <!-- 상단 헤더: 메뉴명 / 영문명 / 닫기 -->
       <div class="sheet-head">
         <div class="sheet-title">
           <h3 id="sheetTitle">메뉴명</h3>
@@ -70,17 +74,8 @@
         </button>
       </div>
 
-      <!-- 스크롤 되는 본문 영역 -->
+      <!-- 이 영역 전체가 세로 스크롤 -->
       <div class="sheet-body">
-        <!-- 필요하면 이미지/설명 사용 -->
-        <!--
-        <div class="sheet-image-frame">
-          <div class="sheet-image-placeholder" id="sheetImage">IMAGE</div>
-        </div>
-        <p class="sheet-desc" id="sheetDescription">메뉴 설명이 들어갑니다.</p>
-        -->
-
-        <!-- 레시피 섹션 -->
         <div class="sheet-section">
           <h4 class="sheet-section-title">RECIPE</h4>
           <div class="recipe-grid" id="sheetContent"></div>

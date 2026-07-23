@@ -555,7 +555,7 @@ body {
   width: 100vw;
   height: 100vh;
   background:
-    url("../assets/girokrecipebook.jpg") center/contain no-repeat;
+    url("../assets/girokrecipebook.png") center/contain no-repeat;
   background-color: #ff672d /* 위아래 여백은 이미지색으로 메우기 */
 }
 

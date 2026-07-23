@@ -3,69 +3,38 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Girok Recipe Board</title>
-
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+  <title>카페 기록 메뉴 보드</title>
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-  <a class="skip-link" href="#menu-content">본문으로 이동</a>
-
   <div class="app-shell">
     <header class="hero">
-      <section class="brand-card" aria-label="카페 기록 안내">
+      <section class="brand-card">
         <div class="brand-top">
-          <div class="brand-mark" aria-label="GIROK 로고">
-            <span>GIROK</span>
-            <span class="dot" aria-hidden="true"></span>
-          </div>
-
-          <button class="theme-toggle" type="button" data-theme-toggle aria-label="다크 모드 전환">
-            <span aria-hidden="true">◐</span>
-          </button>
+          <div class="brand-mark"><span>GIROK</span><span class="dot"></span></div>
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="다크 모드 전환">◐</button>
         </div>
-
         <div class="hero-copy">
-          <h1>기록 레시피 보드</h1>
-          <p>직원이 메뉴를 빠르게 찾고, 레시피를 단계별로 확인하며 제조를 익힐 수 있는 교육용 웹앱입니다.</p>
+          <h1>카페 기록 메뉴 & 레시피</h1>
+          <p>휴대폰, 패드, PC에서 모두 보기 좋은 반응형 메뉴판입니다.</p>
         </div>
-
         <div class="hero-meta">
           <div class="meta-card">
             <strong id="totalCount">0개 메뉴</strong>
-            <span>등록된 메뉴</span>
-          </div>
-          <div class="meta-card">
-            <strong>Recipe Only</strong>
-            <span>메뉴명 + 제조 순서</span>
-          </div>
-          <div class="meta-card">
-            <strong>Responsive</strong>
-            <span>Phone · Tablet · PC</span>
-          </div>
-          <div class="meta-card">
-            <strong>Dark Mode</strong>
-            <span>자동 전환 + 수동 토글</span>
+            <span>등록된 전체 메뉴</span>
           </div>
         </div>
       </section>
-
-      <aside class="brand-card brand-card--light" aria-label="원두 안내">
+      <aside class="brand-card brand-card--light">
         <div>
-          <div class="eyebrow">원두 안내</div>
+          <div class="eyebrow">로스터리 원두</div>
           <h2 class="side-title">커피화 블렌드</h2>
         </div>
         <div class="bean-list" id="beanList"></div>
       </aside>
     </header>
 
-    <div class="control-strip" aria-label="메뉴 탐색">
-      <label class="search-wrap" aria-label="메뉴 검색">
-        <input id="searchInput" class="search-input" type="search" placeholder="메뉴명 검색" />
-        <span class="search-icon" aria-hidden="true">⌕</span>
-      </label>
-
+    <div class="control-strip">
       <div class="chip-row" role="tablist" aria-label="카테고리 필터">
         <button class="chip active" type="button" data-filter="ALL">전체</button>
         <button class="chip" type="button" data-filter="COFFEE">COFFEE</button>
@@ -79,24 +48,19 @@
 
   <div class="sheet" id="recipeSheet" aria-hidden="true">
     <div class="sheet-backdrop" data-close-sheet></div>
-
     <section class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
       <div class="sheet-handle" aria-hidden="true"></div>
-
       <div class="sheet-head">
         <div class="sheet-title">
           <h3 id="sheetTitle">메뉴명</h3>
           <p id="sheetSubtitle">영문명</p>
         </div>
-
         <button class="sheet-close" type="button" data-close-sheet aria-label="팝업 닫기">✕</button>
       </div>
-
       <div class="recipe-grid" id="sheetContent"></div>
     </section>
   </div>
 
-  <script src="./js/data.js"></script>
-  <script src="./js/app.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>

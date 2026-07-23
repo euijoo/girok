@@ -94,13 +94,14 @@
   }
 
   const sections = [];
-  // 라벨: "종류:" 또는 "HOT:" 또는 "ICE:" 또는 "기본:"
-  const pattern = /(종류|HOT|ICE|기본):/g;
+
+  // 라벨 앞뒤에 공백이 있어도 인식 (예: "HOT :" 또는 " HOT:")
+  const pattern = /\s*(종류|HOT|ICE|기본)\s*:/g;
   const matches = [...text.matchAll(pattern)];
 
   if (matches.length) {
     matches.forEach((match, index) => {
-      const label = match[1];
+      const label = match[1].trim(); // " HOT " -> "HOT"
       const start = match.index + match[0].length;
       const end = index + 1 < matches.length ? matches[index + 1].index : text.length;
       const content = text.slice(start, end).trim().replace(/\n/g, ' / ');
@@ -112,6 +113,7 @@
     return sections;
   }
 
+  // 라벨이 하나도 없으면 전체를 "기본" 섹션으로
   return [
     {
       label: '기본',

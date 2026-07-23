@@ -4,15 +4,18 @@
   const beanInfo = [
     {
       name: '짙은',
-      description: '브라질·콜롬비아 기반의 미디엄 다크 블렌드로, 아몬드·브라운 슈거·초콜릿 느낌에 묵직한 바디감이 특징입니다.'
+      description:
+        '브라질·콜롬비아 기반의 미디엄 다크 블렌드로, 아몬드·브라운 슈거·초콜릿 느낌에 묵직한 바디감이 특징입니다.'
     },
     {
       name: '산들',
-      description: '에티오피아 기반의 미디엄 라이트 블렌드로, 딸기·블루베리·홍차 같은 산뜻한 풍미와 깔끔한 피니시가 특징입니다.'
+      description:
+        '에티오피아 기반의 미디엄 라이트 블렌드로, 딸기·블루베리·홍차 같은 산뜻한 풍미와 깔끔한 피니시가 특징입니다.'
     },
     {
       name: '고요',
-      description: '디카페인 블렌드로, 다크초콜릿·호박엿·군고구마 같은 고소한 맛에 쥬시한 마무리가 어우러집니다.'
+      description:
+        '디카페인 블렌드로, 다크초콜릿·호박엿·군고구마 같은 고소한 맛에 쥬시한 마무리가 어우러집니다.'
     }
   ];
 
@@ -25,10 +28,14 @@
     recipeSheet: document.getElementById('recipeSheet'),
     sheetTitle: document.getElementById('sheetTitle'),
     sheetSubtitle: document.getElementById('sheetSubtitle'),
+    // 팝업 내부 실제 콘텐츠 영역은 sheetContent, 설명/이미지용도 따로 잡을 수 있음
     sheetContent: document.getElementById('sheetContent'),
     totalCount: document.getElementById('totalCount'),
     themeToggle: document.querySelector('[data-theme-toggle]'),
-    closeSheetButtons: Array.from(document.querySelectorAll('[data-close-sheet]'))
+    closeSheetButtons: Array.from(document.querySelectorAll('[data-close-sheet]')),
+    splash: document.getElementById('splash'),
+    enterButton: document.getElementById('enterButton'),
+    appShell: document.querySelector('.app-shell')
   };
 
   const state = {
@@ -37,7 +44,31 @@
     menuData: []
   };
 
-  init();
+  // 초기 진입: 스플래시 + 앱 초기화
+  document.addEventListener('DOMContentLoaded', () => {
+    setupSplash();
+    init();
+  });
+
+  function setupSplash() {
+    const { splash, enterButton, appShell } = elements;
+    if (!splash || !enterButton || !appShell) return;
+
+    // 메인 앱은 처음엔 숨김
+    appShell.hidden = true;
+
+    enterButton.addEventListener('click', () => {
+      splash.style.transition = 'opacity 0.35s ease';
+      splash.style.opacity = '0';
+      splash.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        splash.remove();
+      }, 400);
+
+      appShell.hidden = false;
+    });
+  }
 
   async function init() {
     applyTheme(state.activeTheme);
@@ -85,45 +116,48 @@
   }
 
   function parseRecipe(recipeText) {
-  const text = String(recipeText || '')
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .trim();
-  if (!text) {
-    return [];
-  }
-
-  const sections = [];
-
-  // 라벨 앞뒤에 공백이 있어도 인식 (예: "HOT :" 또는 " HOT:")
-  const pattern = /\s*(종류|HOT|ICE|기본)\s*:/g;
-  const matches = [...text.matchAll(pattern)];
-
-  if (matches.length) {
-    matches.forEach((match, index) => {
-      const label = match[1].trim(); // " HOT " -> "HOT"
-      const start = match.index + match[0].length;
-      const end = index + 1 < matches.length ? matches[index + 1].index : text.length;
-      const content = text.slice(start, end).trim().replace(/\n/g, ' / ');
-      sections.push({
-        label,
-        steps: splitSteps(content)
-      });
-    });
-    return sections;
-  }
-
-  // 라벨이 하나도 없으면 전체를 "기본" 섹션으로
-  return [
-    {
-      label: '기본',
-      steps: text
-        .split('\n')
-        .map((line) => line.trim())
-        .filter(Boolean)
+    const text = String(recipeText || '')
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .trim();
+    if (!text) {
+      return [];
     }
-  ];
-}
+
+    const sections = [];
+
+    // 라벨 앞뒤에 공백이 있어도 인식 (예: "HOT :" 또는 " HOT:")
+    const pattern = /\s*(종류|HOT|ICE|기본)\s*:/g;
+    const matches = [...text.matchAll(pattern)];
+
+    if (matches.length) {
+      matches.forEach((match, index) => {
+        const label = match[1].trim();
+        const start = match.index + match[0].length;
+        const end = index + 1 < matches.length ? matches[index + 1].index : text.length;
+        const content = text
+          .slice(start, end)
+          .trim()
+          .replace(/\n/g, ' / ');
+        sections.push({
+          label,
+          steps: splitSteps(content)
+        });
+      });
+      return sections;
+    }
+
+    // 라벨이 하나도 없으면 전체를 "기본" 섹션으로
+    return [
+      {
+        label: '기본',
+        steps: text
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+      }
+    ];
+  }
 
   function splitSteps(text) {
     return String(text)
@@ -290,25 +324,14 @@
   }
 
   function openSheet(menu) {
-    if (
-      !elements.recipeSheet ||
-      !elements.sheetTitle ||
-      !elements.sheetSubtitle ||
-      !elements.sheetContent
-    )
-      return;
+    const { recipeSheet, sheetTitle, sheetSubtitle, sheetContent } = elements;
+    if (!recipeSheet || !sheetTitle || !sheetSubtitle || !sheetContent) return;
 
-    elements.sheetTitle.textContent = menu.titleKo;
-    elements.sheetSubtitle.textContent = menu.titleEn;
+    sheetTitle.textContent = menu.titleKo;
+    sheetSubtitle.textContent = menu.titleEn;
 
     const sections = Array.isArray(menu.recipe?.sections) ? menu.recipe.sections : [];
     const meta = menu.meta || {};
-
-    const hasImage = !!meta.image;
-
-    const imageBlock = hasImage
-      ? `<img src="${escapeHtml(meta.image)}" alt="${escapeHtml(menu.titleKo)}" />`
-      : '<div class="sheet-image-placeholder">이미지 영역</div>';
 
     const descriptionBlock = meta.description
       ? `<p class="sheet-desc">${escapeHtml(meta.description)}</p>`
@@ -344,21 +367,17 @@
       )
       .join('');
 
-    elements.sheetContent.innerHTML = `
-      <div class="sheet-image-frame">
-        ${imageBlock}
-      </div>
-      <div class="sheet-body">
-        ${descriptionBlock}
-        ${optionsBlock}
-        ${notesBlock}
-        ${recipeBlock}
-      </div>
+    // sheet-body는 HTML 쪽에서 이미 존재하므로, sheetContent에는 레시피 섹션만 넣는다
+    sheetContent.innerHTML = `
+      ${descriptionBlock}
+      ${optionsBlock}
+      ${notesBlock}
+      ${recipeBlock}
     `;
 
-    elements.recipeSheet.classList.add('open');
-    elements.recipeSheet.classList.add('sheet--full');
-    elements.recipeSheet.setAttribute('aria-hidden', 'false');
+    recipeSheet.classList.add('open');
+    recipeSheet.classList.add('sheet--full');
+    recipeSheet.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
 

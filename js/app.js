@@ -48,10 +48,6 @@
     renderMenus();
   }
 
-  // -------------------
-  // 데이터 로드 / 파싱
-  // -------------------
-
   async function loadMenuData() {
     try {
       const response = await fetch('./menu-data.json');
@@ -83,7 +79,6 @@
         options: Array.isArray(item.options) ? item.options : [],
         description: item.description || '',
         notes: item.notes || '',
-        // 나중에 menu-data.json에 "image" 필드를 추가하면 여기서 함께 전달
         image: item.image || null
       }
     };
@@ -91,8 +86,12 @@
 
   function parseRecipe(recipeText) {
     const text = String(recipeText || '')
-      .replace(/\r\n/g, '\n')
-      .replace(/\r/g, '\n')
+      .replace(/
+/g, '
+')
+      .replace(/
+/g, '
+')
       .trim();
     if (!text) {
       return [];
@@ -107,7 +106,8 @@
         const label = match[1];
         const start = match.index + match[0].length;
         const end = index + 1 < matches.length ? matches[index + 1].index : text.length;
-        const content = text.slice(start, end).trim().replace(/\n/g, ' / ');
+        const content = text.slice(start, end).trim().replace(/
+/g, ' / ');
         sections.push({
           label,
           steps: splitSteps(content)
@@ -120,7 +120,8 @@
       {
         label: '기본',
         steps: text
-          .split('\n')
+          .split('
+')
           .map((line) => line.trim())
           .filter(Boolean)
       }
@@ -142,10 +143,6 @@
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
-
-  // -------------
-  // 이벤트 바인딩
-  // -------------
 
   function bindEvents() {
     if (elements.themeToggle) {
@@ -170,10 +167,6 @@
     });
   }
 
-  // -------------
-  // 테마 토글
-  // -------------
-
   function applyTheme(theme) {
     state.activeTheme = theme;
     document.documentElement.setAttribute('data-theme', theme);
@@ -196,10 +189,6 @@
     applyTheme(state.activeTheme === 'dark' ? 'light' : 'dark');
   }
 
-  // -------------
-  // 상단 요약 / 원두
-  // -------------
-
   function updateSummary() {
     if (elements.totalCount) {
       elements.totalCount.textContent = `${state.menuData.length}개 메뉴`;
@@ -219,10 +208,6 @@
       )
       .join('');
   }
-
-  // -------------
-  // 메뉴 리스트 렌더
-  // -------------
 
   function getFilteredMenus() {
     return state.menuData.filter(
@@ -307,10 +292,6 @@
     });
   }
 
-  // -------------
-  // 풀스크린 팝업 (A KEEN 스타일)
-  // -------------
-
   function openSheet(menu) {
     if (
       !elements.recipeSheet ||
@@ -320,7 +301,6 @@
     )
       return;
 
-    // 상단 타이틀 설정
     elements.sheetTitle.textContent = menu.titleKo;
     elements.sheetSubtitle.textContent = menu.titleEn;
 
@@ -392,10 +372,6 @@
     elements.recipeSheet.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
-
-  // -------------
-  // 유틸
-  // -------------
 
   function escapeHtml(value) {
     return String(value ?? '')

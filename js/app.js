@@ -85,48 +85,43 @@
   }
 
   function parseRecipe(recipeText) {
-    const text = String(recipeText || '')
-      .replace(/
-/g, '
-')
-      .replace(/
-/g, '
-')
-      .trim();
-    if (!text) {
-      return [];
-    }
-
-    const sections = [];
-    const pattern = /(종류|HOT|ICE|기본):/g;
-    const matches = [...text.matchAll(pattern)];
-
-    if (matches.length) {
-      matches.forEach((match, index) => {
-        const label = match[1];
-        const start = match.index + match[0].length;
-        const end = index + 1 < matches.length ? matches[index + 1].index : text.length;
-        const content = text.slice(start, end).trim().replace(/
-/g, ' / ');
-        sections.push({
-          label,
-          steps: splitSteps(content)
-        });
-      });
-      return sections;
-    }
-
-    return [
-      {
-        label: '기본',
-        steps: text
-          .split('
-')
-          .map((line) => line.trim())
-          .filter(Boolean)
-      }
-    ];
+  const text = String(recipeText || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .trim();
+  if (!text) {
+    return [];
   }
+
+  const sections = [];
+  // 라벨: "종류:" 또는 "HOT:" 또는 "ICE:" 또는 "기본:"
+  const pattern = /(종류|HOT|ICE|기본):/g;
+  const matches = [...text.matchAll(pattern)];
+
+  if (matches.length) {
+    matches.forEach((match, index) => {
+      const label = match[1];
+      const start = match.index + match[0].length;
+      const end = index + 1 < matches.length ? matches[index + 1].index : text.length;
+      const content = text.slice(start, end).trim().replace(/\n/g, ' / ');
+      sections.push({
+        label,
+        steps: splitSteps(content)
+      });
+    });
+    return sections;
+  }
+
+  return [
+    {
+      label: '기본',
+      steps: text
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+    }
+  ];
+}
 
   function splitSteps(text) {
     return String(text)

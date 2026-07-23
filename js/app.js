@@ -48,6 +48,10 @@
     renderMenus();
   }
 
+  // -------------------
+  // 데이터 로드 / 파싱
+  // -------------------
+
   async function loadMenuData() {
     try {
       const response = await fetch('./menu-data.json');
@@ -58,7 +62,10 @@
       console.error(error);
       state.menuData = [];
       if (elements.board) {
-        elements.board.innerHTML = '<div class="panel" style="background: var(--color-surface);"><div class="empty-note">menu-data.json을 불러오지 못했습니다.</div></div>';
+        elements.board.innerHTML =
+          '<div class="panel" style="background: var(--color-surface);">' +
+          '<div class="empty-note">menu-data.json을 불러오지 못했습니다.</div>' +
+          '</div>';
       }
     }
   }
@@ -75,14 +82,21 @@
         price: item.price,
         options: Array.isArray(item.options) ? item.options : [],
         description: item.description || '',
-        notes: item.notes || ''
+        notes: item.notes || '',
+        // 나중에 menu-data.json에 "image" 필드를 추가하면 여기서 함께 전달
+        image: item.image || null
       }
     };
   }
 
   function parseRecipe(recipeText) {
-    const text = String(recipeText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
-    if (!text) return [];
+    const text = String(recipeText || '')
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .trim();
+    if (!text) {
+      return [];
+    }
 
     const sections = [];
     const pattern = /(종류|HOT|ICE|기본):/g;
@@ -105,7 +119,10 @@
     return [
       {
         label: '기본',
-        steps: text.split('\n').map(line => line.trim()).filter(Boolean)
+        steps: text
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
       }
     ];
   }
@@ -113,7 +130,7 @@
   function splitSteps(text) {
     return String(text)
       .split('/')
-      .map(part => part.trim())
+      .map((part) => part.trim())
       .filter(Boolean);
   }
 
@@ -122,32 +139,40 @@
       .toLowerCase()
       .split(' ')
       .filter(Boolean)
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
+
+  // -------------
+  // 이벤트 바인딩
+  // -------------
 
   function bindEvents() {
     if (elements.themeToggle) {
       elements.themeToggle.addEventListener('click', handleThemeToggle);
     }
 
-    elements.chips.forEach(chip => {
+    elements.chips.forEach((chip) => {
       chip.addEventListener('click', () => {
-        elements.chips.forEach(button => button.classList.remove('active'));
+        elements.chips.forEach((button) => button.classList.remove('active'));
         chip.classList.add('active');
         state.activeFilter = chip.dataset.filter || 'ALL';
         renderMenus();
       });
     });
 
-    elements.closeSheetButtons.forEach(button => {
+    elements.closeSheetButtons.forEach((button) => {
       button.addEventListener('click', closeSheet);
     });
 
-    document.addEventListener('keydown', event => {
+    document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') closeSheet();
     });
   }
+
+  // -------------
+  // 테마 토글
+  // -------------
 
   function applyTheme(theme) {
     state.activeTheme = theme;
@@ -157,15 +182,23 @@
 
   function updateThemeButton() {
     if (!elements.themeToggle) return;
-    elements.themeToggle.innerHTML = state.activeTheme === 'dark'
-      ? '<span aria-hidden="true">☀</span>'
-      : '<span aria-hidden="true">◐</span>';
-    elements.themeToggle.setAttribute('aria-label', state.activeTheme === 'dark' ? '라이트 모드 전환' : '다크 모드 전환');
+    elements.themeToggle.innerHTML =
+      state.activeTheme === 'dark'
+        ? '<span aria-hidden="true">☀</span>'
+        : '<span aria-hidden="true">◐</span>';
+    elements.themeToggle.setAttribute(
+      'aria-label',
+      state.activeTheme === 'dark' ? '라이트 모드 전환' : '다크 모드 전환'
+    );
   }
 
   function handleThemeToggle() {
     applyTheme(state.activeTheme === 'dark' ? 'light' : 'dark');
   }
+
+  // -------------
+  // 상단 요약 / 원두
+  // -------------
 
   function updateSummary() {
     if (elements.totalCount) {
@@ -175,25 +208,35 @@
 
   function renderBeans() {
     if (!elements.beanList) return;
-    elements.beanList.innerHTML = beanInfo.map(bean => `
+    elements.beanList.innerHTML = beanInfo
+      .map(
+        (bean) => `
       <article class="bean-card">
         <h3>${escapeHtml(bean.name)}</h3>
         <p>${escapeHtml(bean.description)}</p>
       </article>
-    `).join('');
+    `
+      )
+      .join('');
   }
 
+  // -------------
+  // 메뉴 리스트 렌더
+  // -------------
+
   function getFilteredMenus() {
-    return state.menuData.filter(item => state.activeFilter === 'ALL' || item.category === state.activeFilter);
+    return state.menuData.filter(
+      (item) => state.activeFilter === 'ALL' || item.category === state.activeFilter
+    );
   }
 
   function groupMenusByCategory(items) {
     return ['COFFEE', 'TEA', 'DRINK']
-      .map(category => ({
+      .map((category) => ({
         category,
-        items: items.filter(item => item.category === category)
+        items: items.filter((item) => item.category === category)
       }))
-      .filter(group => group.items.length > 0);
+      .filter((group) => group.items.length > 0);
   }
 
   function getPanelDescription(category) {
@@ -207,7 +250,7 @@
 
   function createMenuItemMarkup(item) {
     const sectionBadges = (item.recipe?.sections || [])
-      .map(section => `<span class="badge">${escapeHtml(section.label)}</span>`)
+      .map((section) => `<span class="badge">${escapeHtml(section.label)}</span>`)
       .join('');
 
     return `
@@ -243,7 +286,10 @@
     const groupedMenus = groupMenusByCategory(filteredMenus);
 
     if (!groupedMenus.length) {
-      elements.board.innerHTML = '<div class="panel" style="background: var(--color-surface);"><div class="empty-note">표시할 메뉴가 없습니다.</div></div>';
+      elements.board.innerHTML =
+        '<div class="panel" style="background: var(--color-surface);">' +
+        '<div class="empty-note">표시할 메뉴가 없습니다.</div>' +
+        '</div>';
       return;
     }
 
@@ -253,40 +299,88 @@
 
   function bindMenuEvents() {
     const buttons = Array.from(document.querySelectorAll('.menu-item'));
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       button.addEventListener('click', () => {
-        const menu = state.menuData.find(item => item.titleKo === button.dataset.menu);
+        const menu = state.menuData.find((item) => item.titleKo === button.dataset.menu);
         if (menu) openSheet(menu);
       });
     });
   }
 
-  function openSheet(menu) {
-    if (!elements.recipeSheet || !elements.sheetTitle || !elements.sheetSubtitle || !elements.sheetContent) return;
+  // -------------
+  // 풀스크린 팝업 (A KEEN 스타일)
+  // -------------
 
+  function openSheet(menu) {
+    if (
+      !elements.recipeSheet ||
+      !elements.sheetTitle ||
+      !elements.sheetSubtitle ||
+      !elements.sheetContent
+    )
+      return;
+
+    // 상단 타이틀 설정
     elements.sheetTitle.textContent = menu.titleKo;
     elements.sheetSubtitle.textContent = menu.titleEn;
 
     const sections = Array.isArray(menu.recipe?.sections) ? menu.recipe.sections : [];
     const meta = menu.meta || {};
 
-    const metaBlock = [
-      meta.description ? `<article class="recipe-card"><h4>설명</h4><p>${escapeHtml(meta.description)}</p></article>` : '',
-      meta.options && meta.options.length ? `<article class="recipe-card"><h4>옵션</h4><ul>${meta.options.map(option => `<li>${escapeHtml(option)}</li>`).join('')}</ul></article>` : '',
-      meta.notes ? `<article class="recipe-card"><h4>노트</h4><p>${escapeHtml(meta.notes)}</p></article>` : ''
-    ].join('');
+    const hasImage = !!meta.image;
 
-    const recipeBlock = sections.map(section => `
-      <article class="recipe-card">
-        <h4>${escapeHtml(section.label)}</h4>
-        <ol>
-          ${(section.steps || []).map(step => `<li>${escapeHtml(step)}</li>`).join('')}
+    const imageBlock = hasImage
+      ? `<img src="${escapeHtml(meta.image)}" alt="${escapeHtml(menu.titleKo)}" />`
+      : '<div class="sheet-image-placeholder">이미지 영역</div>';
+
+    const descriptionBlock = meta.description
+      ? `<p class="sheet-desc">${escapeHtml(meta.description)}</p>`
+      : '';
+
+    const optionsBlock =
+      meta.options && meta.options.length
+        ? `<section class="sheet-section sheet-section--options">
+             <h4 class="sheet-section-title">옵션</h4>
+             <ul class="sheet-options">
+               ${meta.options.map((option) => `<li>${escapeHtml(option)}</li>`).join('')}
+             </ul>
+           </section>`
+        : '';
+
+    const notesBlock = meta.notes
+      ? `<section class="sheet-section sheet-section--notes">
+           <h4 class="sheet-section-title">노트</h4>
+           <p class="sheet-notes-text">${escapeHtml(meta.notes)}</p>
+         </section>`
+      : '';
+
+    const recipeBlock = sections
+      .map(
+        (section) => `
+      <section class="sheet-section">
+        <h4 class="sheet-section-title">${escapeHtml(section.label)}</h4>
+        <ol class="sheet-steps">
+          ${(section.steps || []).map((step) => `<li>${escapeHtml(step)}</li>`).join('')}
         </ol>
-      </article>
-    `).join('');
+      </section>
+    `
+      )
+      .join('');
 
-    elements.sheetContent.innerHTML = metaBlock + recipeBlock;
+    elements.sheetContent.innerHTML = `
+      <div class="sheet-image-frame">
+        ${imageBlock}
+      </div>
+      <div class="sheet-body">
+        ${descriptionBlock}
+        ${optionsBlock}
+        ${notesBlock}
+        ${recipeBlock}
+      </div>
+    `;
+
     elements.recipeSheet.classList.add('open');
+    elements.recipeSheet.classList.add('sheet--full');
     elements.recipeSheet.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -294,9 +388,14 @@
   function closeSheet() {
     if (!elements.recipeSheet) return;
     elements.recipeSheet.classList.remove('open');
+    elements.recipeSheet.classList.remove('sheet--full');
     elements.recipeSheet.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
+
+  // -------------
+  // 유틸
+  // -------------
 
   function escapeHtml(value) {
     return String(value ?? '')

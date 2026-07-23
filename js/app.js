@@ -317,7 +317,7 @@
     const optionsBlock =
       meta.options && meta.options.length
         ? `<section class="sheet-section sheet-section--options">
-             <h4 class="sheet-section-title">옵션</h4>
+             <h4 class="sheet-section-title">✔선택사항</h4>
              <ul class="sheet-options">
                ${meta.options.map((option) => `<li>${escapeHtml(option)}</li>`).join('')}
              </ul>
@@ -326,7 +326,7 @@
 
     const notesBlock = meta.notes
       ? `<section class="sheet-section sheet-section--notes">
-           <h4 class="sheet-section-title">참고사항</h4>
+           <h4 class="sheet-section-title">※참고사항</h4>
            <p class="sheet-notes-text">${escapeHtml(meta.notes)}</p>
          </section>`
       : '';

@@ -1,439 +1,143 @@
-* {
-  box-sizing: border-box;
-}
+/* ================================
+   풀스크린 팝업 (A KEEN 스타일)
+   ================================ */
 
-:root {
-  color-scheme: light dark;
-  --color-bg: #f5f5f7;
-  --color-bg-elevated: #ffffff;
-  --color-surface: #ffffff;
-  --color-border-subtle: rgba(15, 23, 42, 0.08);
-  --color-text: #0f172a;
-  --color-text-soft: #6b7280;
-  --color-accent: #111827;
-  --color-accent-soft: rgba(15, 23, 42, 0.06);
-  --color-chip: #e5e7eb;
-  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-pill: 999px;
-}
-
-:root[data-theme="dark"] {
-  --color-bg: #020617;
-  --color-bg-elevated: #020617;
-  --color-surface: #020617;
-  --color-border-subtle: rgba(148, 163, 184, 0.3);
-  --color-text: #e5e7eb;
-  --color-text-soft: #9ca3af;
-  --color-accent: #f9fafb;
-  --color-accent-soft: rgba(15, 23, 42, 0.8);
-  --color-chip: rgba(15, 23, 42, 0.9);
-  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.8);
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.35), transparent 55%),
-              radial-gradient(circle at bottom right, rgba(244, 244, 245, 0.74), transparent 55%),
-              var(--color-bg);
-  color: var(--color-text);
-}
-
-body {
-  min-height: 100vh;
-}
-
-.app-shell {
-  max-width: 1050px;
-  margin: 16px auto 32px;
-  padding: 16px;
-}
-
-.hero {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-.brand-card {
-  background: rgba(15, 23, 42, 0.98);
-  color: #f9fafb;
-  padding: 18px 18px 16px;
-  border-radius: 24px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(148, 163, 184, 0.55);
-}
-
-.brand-card--light {
-  background: rgba(15, 23, 42, 0.04);
-  color: var(--color-text);
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.brand-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.brand-mark {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(249, 250, 251, 0.18);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-}
-
-.brand-mark .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: #10b981;
-}
-
-.theme-toggle {
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  background: rgba(15, 23, 42, 0.9);
-  color: #e5e7eb;
-  width: 34px;
-  height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.hero-copy h1 {
-  margin: 0 0 6px;
-  font-size: 20px;
-  letter-spacing: -0.03em;
-}
-
-.hero-copy p {
-  margin: 0;
-  font-size: 12px;
-  color: rgba(229, 231, 235, 0.7);
-}
-
-.hero-meta {
-  margin-top: 16px;
-}
-
-.meta-card {
-  display: inline-flex;
-  flex-direction: column;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.5);
-}
-
-.meta-card strong {
-  font-size: 14px;
-}
-
-.meta-card span {
-  font-size: 11px;
-  color: rgba(209, 213, 219, 0.85);
-}
-
-.eyebrow {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--color-text-soft);
-}
-
-.side-title {
-  margin: 4px 0 10px;
-  font-size: 14px;
-}
-
-.bean-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.bean-card {
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.04);
-  border: 1px dashed rgba(148, 163, 184, 0.65);
-}
-
-.bean-card h3 {
-  margin: 0 0 2px;
-  font-size: 12px;
-}
-
-.bean-card p {
-  margin: 0;
-  font-size: 11px;
-  color: var(--color-text-soft);
-}
-
-.control-strip {
-  margin-bottom: 12px;
-}
-
-.chip-row {
-  display: flex;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.04);
-  border: 1px solid rgba(148, 163, 184, 0.45);
-  overflow-x: auto;
-}
-
-.chip {
-  border-radius: 999px;
-  border: none;
-  padding: 6px 12px;
-  font-size: 12px;
-  background: transparent;
-  color: var(--color-text-soft);
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.chip.active {
-  background: #0f172a;
-  color: #f9fafb;
-}
-
-.board {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.panel {
-  background: var(--color-surface);
-  border-radius: 20px;
-  padding: 12px 12px 10px;
-  border: 1px solid var(--color-border-subtle);
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
-}
-
-.panel-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.panel-head h2 {
-  margin: 0;
-  font-size: 13px;
-  letter-spacing: 0.16em;
-}
-
-.panel-head p {
-  margin: 0;
-  font-size: 11px;
-  color: var(--color-text-soft);
-}
-
-.menu-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.menu-item {
-  width: 100%;
-  border-radius: 14px;
-  border: none;
-  background: rgba(15, 23, 42, 0.02);
-  padding: 8px 9px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  cursor: pointer;
-  text-align: left;
-}
-
-.menu-item:hover {
-  background: rgba(15, 23, 42, 0.04);
-}
-
-.item-top {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.name-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.name-ko {
-  font-size: 13px;
-}
-
-.name-en {
-  font-size: 11px;
-  color: var(--color-text-soft);
-}
-
-.section-badges {
-  margin-top: 4px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.badge {
-  border-radius: 999px;
-  padding: 2px 8px;
-  font-size: 10px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  background: rgba(15, 23, 42, 0.02);
-}
-
-.empty-note {
-  padding: 16px 8px 10px;
-  font-size: 12px;
-  color: var(--color-text-soft);
-}
-
-.sheet {
-  position: fixed;
-  inset: 0;
+/* 전체 화면을 채우는 시트 모드 */
+.sheet.sheet--full {
   display: none;
-  z-index: 40;
 }
 
-.sheet.open {
+.sheet.sheet--full.open {
   display: block;
 }
 
-.sheet-backdrop {
-  position: absolute;
+/* 풀스크린 패널 기본 레이아웃 */
+.sheet.sheet--full .sheet-panel {
+  position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.5);
+  margin: 0;
+  max-height: 100vh;
+  border-radius: 0;
+  background: #f3f0e8; /* 레퍼런스 느낌의 크림 톤 */
+  color: #111827;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
 }
 
-.sheet-panel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-height: 80vh;
-  margin: 0 auto;
-  background: var(--color-bg-elevated);
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.6);
-  padding: 12px 14px 16px;
-}
-
-.sheet-handle {
-  width: 42px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.8);
-  margin: 0 auto 8px;
-}
-
-.sheet-head {
+/* 상단 헤더 영역 (제목 + 닫기 버튼) */
+.sheet.sheet--full .sheet-head {
+  padding: 20px 20px 8px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 
-.sheet-title h3 {
+/* 메뉴 이름 (A KEEN 스타일 타이틀) */
+.sheet.sheet--full .sheet-title h3 {
   margin: 0;
-  font-size: 16px;
+  font-family: "Cormorant Garamond", "Iowan Old Style", serif;
+  font-size: 24px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-.sheet-title p {
-  margin: 2px 0 0;
+/* 영문명 */
+.sheet.sheet--full .sheet-title p {
+  margin: 4px 0 0;
   font-size: 11px;
-  color: var(--color-text-soft);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.55);
 }
 
-.sheet-close {
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  background: transparent;
-  width: 30px;
-  height: 30px;
-  display: inline-flex;
+/* 이미지 프레임 */
+.sheet-image-frame {
+  padding: 0 20px;
+}
+
+.sheet-image-frame img,
+.sheet-image-placeholder {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  aspect-ratio: 4 / 5;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111; /* 사진 없을 때는 검정 배경 */
+  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-}
-
-.recipe-grid {
-  margin-top: 10px;
-  padding-bottom: 8px;
-  max-height: calc(80vh - 80px);
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-}
-
-.recipe-card {
-  border-radius: 14px;
-  padding: 10px 10px 8px;
-  background: rgba(15, 23, 42, 0.02);
-  border: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.recipe-card h4 {
-  margin: 0 0 4px;
-  font-size: 12px;
-}
-
-.recipe-card p,
-.recipe-card li {
+  color: rgba(249, 250, 251, 0.55);
   font-size: 11px;
-  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
 }
 
-.recipe-card ol {
+/* 본문(설명 + 옵션 + 레시피) 영역 */
+.sheet-body {
+  flex: 1;
+  padding: 18px 20px 24px;
+  overflow-y: auto;
+}
+
+/* 메뉴 설명 */
+.sheet-desc {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* 섹션 공통 (옵션/노트/HOT/ICE/기본 등) */
+.sheet-section {
+  margin-top: 18px;
+}
+
+.sheet-section-title {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* 옵션 리스트 */
+.sheet-options {
   margin: 0;
   padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
-@media (min-width: 720px) {
-  .app-shell {
-    margin-top: 32px;
+/* 노트 텍스트 */
+.sheet-notes-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* 레시피 스텝 */
+.sheet-steps {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.sheet-steps li {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* 데스크톱에서는 중앙 카드 느낌으로 */
+@media (min-width: 768px) {
+  .sheet.sheet--full .sheet-backdrop {
+    background: rgba(15, 23, 42, 0.85);
   }
 
-  .hero {
-    margin-bottom: 22px;
-  }
-
-  .panel {
-    padding: 14px 16px 12px;
-  }
-
-  .menu-item {
-    padding: 9px 12px;
-  }
-
-  .recipe-panel {
-    max-width: 600px;
+  .sheet.sheet--full .sheet-panel {
+    max-width: 540px;
+    margin: 24px auto;
+    inset: 24px 0;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.8);
   }
 }

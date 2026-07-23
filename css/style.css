@@ -2,6 +2,7 @@
   box-sizing: border-box;
 }
 
+/* 테마 변수 */
 :root {
   color-scheme: light dark;
   --color-bg: #f5f5f7;
@@ -19,6 +20,7 @@
   --radius-pill: 999px;
 }
 
+/* 다크 모드 */
 :root[data-theme="dark"] {
   --color-bg: #020617;
   --color-bg-elevated: #020617;
@@ -32,13 +34,16 @@
   --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.8);
 }
 
-html, body {
+/* 기본 레이아웃 */
+html,
+body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.35), transparent 55%),
-              radial-gradient(circle at bottom right, rgba(244, 244, 245, 0.74), transparent 55%),
-              var(--color-bg);
+  background:
+    radial-gradient(circle at top left, rgba(148, 163, 184, 0.35), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(244, 244, 245, 0.74), transparent 55%),
+    var(--color-bg);
   color: var(--color-text);
 }
 
@@ -52,6 +57,7 @@ body {
   padding: 16px;
 }
 
+/* 히어로 영역 */
 .hero {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
@@ -187,6 +193,7 @@ body {
   color: var(--color-text-soft);
 }
 
+/* 카테고리 칩 */
 .control-strip {
   margin-bottom: 12px;
 }
@@ -217,6 +224,7 @@ body {
   color: #f9fafb;
 }
 
+/* 메뉴 보드 */
 .board {
   display: flex;
   flex-direction: column;
@@ -315,6 +323,10 @@ body {
   color: var(--color-text-soft);
 }
 
+/* ================================
+   기본 시트 상태 (공통)
+   ================================ */
+
 .sheet {
   position: fixed;
   inset: 0;
@@ -332,43 +344,55 @@ body {
   background: rgba(15, 23, 42, 0.5);
 }
 
-.sheet-panel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-height: 80vh;
-  margin: 0 auto;
-  background: var(--color-bg-elevated);
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.6);
-  padding: 12px 14px 16px;
+/* ================================
+   A KEEN 스타일 풀스크린 팝업
+   ================================ */
+
+.sheet.sheet--full {
+  display: none;
 }
 
-.sheet-handle {
-  width: 42px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.8);
-  margin: 0 auto 8px;
+.sheet.sheet--full.open {
+  display: block;
 }
 
-.sheet-head {
+/* 풀스크린 패널 기본 */
+.sheet.sheet--full .sheet-panel {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  max-height: 100vh;
+  border-radius: 0;
+  background: #f3f0e8;
+  color: #111827;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+}
+
+/* 상단 헤더 (메뉴명 + 닫기) */
+.sheet.sheet--full .sheet-head {
+  padding: 20px 20px 8px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 
-.sheet-title h3 {
+.sheet.sheet--full .sheet-title h3 {
   margin: 0;
-  font-size: 16px;
+  font-family: "Cormorant Garamond", "Iowan Old Style", serif;
+  font-size: 24px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-.sheet-title p {
-  margin: 2px 0 0;
+.sheet.sheet--full .sheet-title p {
+  margin: 4px 0 0;
   font-size: 11px;
-  color: var(--color-text-soft);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.55);
 }
 
 .sheet-close {
@@ -381,116 +405,6 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
-
-.recipe-grid {
-  margin-top: 10px;
-  padding-bottom: 8px;
-  max-height: calc(80vh - 80px);
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-}
-
-.recipe-card {
-  border-radius: 14px;
-  padding: 10px 10px 8px;
-  background: rgba(15, 23, 42, 0.02);
-  border: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.recipe-card h4 {
-  margin: 0 0 4px;
-  font-size: 12px;
-}
-
-.recipe-card p,
-.recipe-card li {
-  font-size: 11px;
-  color: var(--color-text);
-}
-
-.recipe-card ol {
-  margin: 0;
-  padding-left: 18px;
-}
-
-@media (min-width: 720px) {
-  .app-shell {
-    margin-top: 32px;
-  }
-
-  .hero {
-    margin-bottom: 22px;
-  }
-
-  .panel {
-    padding: 14px 16px 12px;
-  }
-
-  .menu-item {
-    padding: 9px 12px;
-  }
-
-  .recipe-panel {
-    max-width: 600px;
-  }
-}
-
-
-/* ================================
-   풀스크린 팝업 (A KEEN 스타일)
-   ================================ */
-
-/* 전체 화면을 채우는 시트 모드 */
-.sheet.sheet--full {
-  display: none;
-}
-
-.sheet.sheet--full.open {
-  display: block;
-}
-
-/* 풀스크린 패널 기본 레이아웃 */
-.sheet.sheet--full .sheet-panel {
-  position: fixed;
-  inset: 0;
-  margin: 0;
-  max-height: 100vh;
-  border-radius: 0;
-  background: #f3f0e8; /* 레퍼런스 느낌의 크림 톤 */
-  color: #111827;
-  display: flex;
-  flex-direction: column;
-  box-shadow: none;
-}
-
-/* 상단 헤더 영역 (제목 + 닫기 버튼) */
-.sheet.sheet--full .sheet-head {
-  padding: 20px 20px 8px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-/* 메뉴 이름 (A KEEN 스타일 타이틀) */
-.sheet.sheet--full .sheet-title h3 {
-  margin: 0;
-  font-family: "Cormorant Garamond", "Iowan Old Style", serif;
-  font-size: 24px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-/* 영문명 */
-.sheet.sheet--full .sheet-title p {
-  margin: 4px 0 0;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(15, 23, 42, 0.55);
 }
 
 /* 이미지 프레임 */
@@ -506,7 +420,7 @@ body {
   aspect-ratio: 4 / 5;
   border-radius: 8px;
   overflow: hidden;
-  background: #111; /* 사진 없을 때는 검정 배경 */
+  background: #111;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -516,7 +430,7 @@ body {
   letter-spacing: 0.16em;
 }
 
-/* 본문(설명 + 옵션 + 레시피) 영역 */
+/* 본문(설명 + 옵션 + 레시피) – 여기만 스크롤 */
 .sheet-body {
   flex: 1;
   padding: 18px 20px 24px;
@@ -530,7 +444,7 @@ body {
   line-height: 1.6;
 }
 
-/* 섹션 공통 (옵션/노트/HOT/ICE/기본 등) */
+/* 공통 섹션 (옵션/노트/레시피) */
 .sheet-section {
   margin-top: 18px;
 }
@@ -568,8 +482,31 @@ body {
   line-height: 1.8;
 }
 
-/* 데스크톱에서는 중앙 카드 느낌으로 */
+/* 레시피 카드들 */
+.recipe-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 데스크톱에서 카드형 느낌 */
 @media (min-width: 768px) {
+  .app-shell {
+    margin-top: 32px;
+  }
+
+  .hero {
+    margin-bottom: 22px;
+  }
+
+  .panel {
+    padding: 14px 16px 12px;
+  }
+
+  .menu-item {
+    padding: 9px 12px;
+  }
+
   .sheet.sheet--full .sheet-backdrop {
     background: rgba(15, 23, 42, 0.85);
   }
@@ -580,5 +517,12 @@ body {
     inset: 24px 0;
     border-radius: 18px;
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.8);
+  }
+}
+
+/* 반응형: 모바일에서 hero 단일 컬럼 */
+@media (max-width: 719px) {
+  .hero {
+    grid-template-columns: 1fr;
   }
 }

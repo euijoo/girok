@@ -1,89 +1,716 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>카페 기록 메뉴 보드</title>
-  <link rel="stylesheet" href="./css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>girok - 모바일 & PC 레시피 매니저</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        * {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-dark: #121212;
+            --bg-orange: #f38355;
+            --bg-green: #90a98f;
+            --bg-cream: #eee9e0;
+        }
+
+        .girok-black { background-color: var(--bg-dark); }
+        .girok-orange { background-color: var(--bg-orange); }
+        .girok-green { background-color: var(--bg-green); }
+        .girok-cream { background-color: var(--bg-cream); }
+
+        /* Vertical logo only for large screens */
+        @media (min-width: 1024px) {
+            .text-vertical {
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                transform: rotate(180deg);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 99px;
+        }
+
+        /* Active touch state for mobile items */
+        .menu-touch-item {
+            min-height: 48px;
+            transition: all 0.15s ease-in-out;
+        }
+        .menu-touch-item:active {
+            transform: scale(0.98);
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Glassmorphism helpers */
+        .glass-dark {
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
 </head>
-<body>
-  <!-- 시작 스플래시: girokrecipebook.jpg -->
-  <div class="splash" id="splash">
-    <button class="splash-hit-area" id="enterButton" type="button" aria-label="레시피 북 열기">
-      <div class="splash-image-frame"></div>
-    </button>
-  </div>
+<body class="bg-stone-900 min-h-screen text-stone-800 flex flex-col items-center pb-20 lg:pb-8">
 
-  <!-- 실제 메인 앱: 처음엔 hidden -->
-  <div class="app-shell" hidden>
-    <header class="hero">
-      <section class="brand-card">
-        <div class="brand-top">
-          <div class="brand-mark">
-            <span>GIROK</span><span class="dot"></span>
-          </div>
-          <button class="theme-toggle" type="button" data-theme-toggle aria-label="다크 모드 전환">
-            ◐
-          </button>
-        </div>
-        <div class="hero-copy">
-          <h1>카페 기록 메뉴 & 레시피</h1>
-          <p>휴대폰, 패드, PC에서 모두 보기 좋은 반응형 메뉴판입니다.</p>
-        </div>
-        <div class="hero-meta">
-          <div class="meta-card">
-            <strong id="totalCount">0개 메뉴</strong>
-            <span>등록된 전체 메뉴</span>
-          </div>
-        </div>
-      </section>
+    <!-- Sticky Header & Mobile Control Bar -->
+    <header class="w-full bg-stone-950/90 text-stone-100 border-b border-stone-800 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+            <!-- Brand Logo & Subtitle -->
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-black tracking-tighter text-amber-500">girok</span>
+                <span class="hidden sm:inline-block text-xs bg-stone-800 text-stone-300 px-2.5 py-1 rounded-full font-medium border border-stone-700">
+                    스마트 메뉴 & 레시피 매니저
+                </span>
+            </div>
 
-      <aside class="brand-card brand-card--light">
-        <div>
-          <div class="eyebrow">로스터리 원두</div>
-          <h2 class="side-title">커피화 블렌드</h2>
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+                <button id="resetDataBtn" title="초기 메뉴 복원" class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-xl transition border border-stone-700 active:scale-95">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                    <span class="hidden md:inline">초기 복원</span>
+                </button>
+                <button id="openAddModalBtn" class="flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-stone-950 rounded-xl transition shadow-md hover:shadow-amber-500/20 active:scale-95">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>메뉴 / 레시피 등록</span>
+                </button>
+            </div>
         </div>
-        <div class="bean-list" id="beanList"></div>
-      </aside>
+
+        <!-- Mobile Filter Navigation Bar (Shown on Mobile/Tablet < 1024px) -->
+        <nav class="flex lg:hidden overflow-x-auto px-4 py-2 bg-stone-900 border-t border-stone-800 gap-2 no-scrollbar">
+            <button data-cat="ALL" class="tab-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition bg-amber-500 text-stone-950">
+                전체보기
+            </button>
+            <button data-cat="COFFEE" class="tab-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition bg-stone-800 text-stone-300">
+                COFFEE
+            </button>
+            <button data-cat="TEA" class="tab-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition bg-stone-800 text-stone-300">
+                TEA
+            </button>
+            <button data-cat="DRINK" class="tab-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition bg-stone-800 text-stone-300">
+                DRINK
+            </button>
+        </nav>
     </header>
 
-    <div class="control-strip">
-      <div class="chip-row" role="tablist" aria-label="카테고리 필터">
-        <button class="chip active" type="button" data-filter="ALL">전체</button>
-        <button class="chip" type="button" data-filter="COFFEE">COFFEE</button>
-        <button class="chip" type="button" data-filter="TEA">TEA</button>
-        <button class="chip" type="button" data-filter="DRINK">DRINK</button>
-      </div>
+    <!-- Main Container -->
+    <div class="w-full max-w-7xl px-2 sm:px-4 lg:px-6 pt-4 lg:pt-8">
+        
+        <!-- Main Board Wrapper -->
+        <main class="w-full bg-stone-900 lg:bg-white rounded-2xl lg:shadow-2xl overflow-hidden lg:border border-stone-800/20 grid grid-cols-1 lg:grid-cols-12 min-h-[720px] gap-4 lg:gap-0">
+            
+            <!-- Branding Panel (Black) -->
+            <section id="panel-BRAND" class="category-panel lg:col-span-2 girok-black text-stone-100 p-5 lg:p-6 flex flex-col justify-between rounded-2xl lg:rounded-none border border-stone-800 lg:border-none">
+                <div>
+                    <h1 class="text-4xl lg:text-6xl font-black tracking-tighter text-vertical select-none py-2 lg:py-4 text-stone-100">girok</h1>
+                </div>
+                
+                <div class="space-y-4 text-xs font-light text-stone-400 border-t border-stone-800/80 pt-4 mt-4 lg:mt-0">
+                    <div>
+                        <p class="text-stone-200 font-bold mb-1">원두 선택 가능</p>
+                        <p class="leading-relaxed text-stone-400">산들 / 짙은 / 디카페인 (+1.0)</p>
+                    </div>
+                    <div class="space-y-0.5">
+                        <p class="leading-relaxed">테이크 아웃 할인: <span class="text-amber-400 font-semibold">-0.5</span></p>
+                        <p class="leading-relaxed">에스프레소 샷 추가: <span class="text-amber-400 font-semibold">+1.0</span></p>
+                    </div>
+                    <div class="pt-2 text-[11px] text-stone-500 border-t border-stone-800/60 flex items-center gap-1.5">
+                        <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 text-amber-500 flex-shrink-0"></i>
+                        <span>메뉴 터치 시 만드는 레시피가 표시됩니다.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COFFEE Section (Orange) -->
+            <section id="panel-COFFEE" class="category-panel lg:col-span-4 girok-orange p-5 lg:p-8 flex flex-col justify-between text-stone-900 rounded-2xl lg:rounded-none border border-orange-600/20 lg:border-r">
+                <div>
+                    <div class="flex justify-between items-baseline mb-1">
+                        <h2 class="text-2xl lg:text-3xl font-black tracking-tight">COFFEE</h2>
+                        <span class="text-[11px] font-bold px-2 py-0.5 bg-black/10 rounded-md">커피</span>
+                    </div>
+                    <p class="text-xs font-medium text-stone-800/80 mb-4 lg:mb-6">산들 / 짙은 / 디카페인 +1.0</p>
+
+                    <!-- Coffee Menu List -->
+                    <div id="list-COFFEE" class="space-y-1">
+                        <!-- Dynamic Coffee Items -->
+                    </div>
+                </div>
+
+                <!-- Coffee Bean Info -->
+                <div class="mt-6 pt-4 border-t border-black/10 text-xs space-y-2.5 opacity-90">
+                    <div>
+                        <p class="font-extrabold text-stone-900">산들 <span class="font-normal text-stone-800 text-[11px]">[블렌딩]</span></p>
+                        <p class="text-[11px] text-stone-800/80">에티오피아 예가체프 G1 내츄럴 60% + 시다마 G1 워시드 40%</p>
+                        <p class="text-[10px] text-stone-800/70 italic">딸기, 블루베리, 블랙티, 깔끔한 뒷맛</p>
+                    </div>
+                    <div>
+                        <p class="font-extrabold text-stone-900">짙은 <span class="font-normal text-stone-800 text-[11px]">[블렌딩]</span></p>
+                        <p class="text-[11px] text-stone-800/80">브라질 내츄럴 60% + 콜롬비아 후일라 워시드 40%</p>
+                        <p class="text-[10px] text-stone-800/70 italic">아몬드, 브라운슈가, 초콜릿, 묵직한 바디감</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEA Section (Green) -->
+            <section id="panel-TEA" class="category-panel lg:col-span-3 girok-green p-5 lg:p-8 flex flex-col justify-between text-stone-900 rounded-2xl lg:rounded-none border border-emerald-800/20 lg:border-r">
+                <div>
+                    <div class="flex justify-between items-baseline mb-4 lg:mb-6">
+                        <h2 class="text-2xl lg:text-3xl font-black tracking-tight">TEA</h2>
+                        <span class="text-[11px] font-bold px-2 py-0.5 bg-black/10 rounded-md">수제 차</span>
+                    </div>
+
+                    <!-- Tea Menu List -->
+                    <div id="list-TEA" class="space-y-1">
+                        <!-- Dynamic Tea Items -->
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-black/10 text-[11px] text-stone-800/70">
+                    🌿 모든 차 메뉴는 수제청과 신선한 허브를 기반으로 제조합니다.
+                </div>
+            </section>
+
+            <!-- DRINK Section (Cream) -->
+            <section id="panel-DRINK" class="category-panel lg:col-span-3 girok-cream p-5 lg:p-8 flex flex-col justify-between text-stone-900 rounded-2xl lg:rounded-none border border-stone-300/40">
+                <div>
+                    <div class="flex justify-between items-baseline mb-4 lg:mb-6">
+                        <h2 class="text-2xl lg:text-3xl font-black tracking-tight">DRINK</h2>
+                        <span class="text-[11px] font-bold px-2 py-0.5 bg-black/10 rounded-md">음료 & 에이드</span>
+                    </div>
+
+                    <!-- Drink Menu List -->
+                    <div id="list-DRINK" class="space-y-1">
+                        <!-- Dynamic Drink Items -->
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-black/10 text-[11px] text-stone-800/70">
+                    🥤 수제 청 에이드 및 논커피 블렌디드 음료입니다.
+                </div>
+            </section>
+
+        </main>
     </div>
 
-    <main id="menu-content" class="board"></main>
-  </div>
+    <!-- RECIPE VIEW MODAL / BOTTOM SHEET FOR MOBILE -->
+    <div id="recipeModal" class="fixed inset-0 bg-stone-950/75 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all">
+        <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden border border-stone-200 transform transition-all animate-in slide-in-from-bottom sm:zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+            
+            <!-- Modal Header -->
+            <div id="recipeModalHeader" class="p-5 sm:p-6 text-white flex justify-between items-start relative flex-shrink-0">
+                <div>
+                    <span id="recipeCategoryTag" class="text-[10px] font-bold tracking-wider uppercase bg-black/20 px-2.5 py-1 rounded-full text-white/90">
+                        CATEGORY
+                    </span>
+                    <h3 id="recipeTitle" class="text-2xl font-black mt-2 tracking-tight">메뉴 이름</h3>
+                    <p id="recipePrice" class="text-base font-bold text-white/90 mt-0.5">0.0</p>
+                </div>
+                <button onclick="closeModal('recipeModal')" class="p-2 rounded-full bg-black/10 hover:bg-black/20 text-white transition active:scale-90">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
 
-  <!-- A KEEN 스타일 풀스크린 레시피 팝업 -->
-  <div class="sheet sheet--full" id="recipeSheet" aria-hidden="true">
-    <div class="sheet-backdrop" data-close-sheet></div>
+            <!-- Modal Content (Scrollable) -->
+            <div class="p-5 sm:p-6 space-y-5 overflow-y-auto flex-1">
+                <!-- Ingredients Section -->
+                <div>
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-600"></i> 준비 재료 및 정량
+                    </h4>
+                    <ul id="recipeIngredients" class="bg-stone-50 rounded-xl p-3.5 border border-stone-200/80 text-sm space-y-1.5 text-stone-700 font-medium">
+                        <!-- Dynamic Ingredients -->
+                    </ul>
+                </div>
 
-    <section class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-      <div class="sheet-head">
-        <div class="sheet-title">
-          <h3 id="sheetTitle">메뉴명</h3>
-          <p id="sheetSubtitle">영문명</p>
+                <!-- Preparation Steps -->
+                <div>
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="chef-hat" class="w-4 h-4 text-amber-600"></i> 제조 순서 (Step-by-Step)
+                    </h4>
+                    <ol id="recipeSteps" class="space-y-2 text-sm text-stone-700">
+                        <!-- Dynamic Steps -->
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-stone-50 border-t border-stone-200 flex justify-between items-center flex-shrink-0">
+                <button id="deleteMenuBtn" class="text-xs text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-rose-50 transition active:scale-95">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> 메뉴 삭제
+                </button>
+                <button onclick="closeModal('recipeModal')" class="px-5 py-2.5 bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs rounded-xl shadow transition active:scale-95">
+                    닫기
+                </button>
+            </div>
         </div>
-        <button class="sheet-close" type="button" data-close-sheet aria-label="팝업 닫기">
-          ✕
-        </button>
-      </div>
+    </div>
 
-      <!-- 이 영역 전체가 세로 스크롤 -->
-      <div class="sheet-body">
-        <div class="sheet-section">
-          <h4 class="sheet-section-title">RECIPE</h4>
-          <div class="recipe-grid" id="sheetContent"></div>
+    <!-- ADD/EDIT MENU FORM MODAL -->
+    <div id="addModal" class="fixed inset-0 bg-stone-950/75 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all">
+        <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden border border-stone-200 max-h-[92vh] flex flex-col">
+            
+            <!-- Header -->
+            <div class="p-4 sm:p-5 bg-stone-950 text-white flex justify-between items-center flex-shrink-0">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="w-5 h-5 text-amber-500"></i>
+                    <h3 class="text-base sm:text-lg font-bold">새 메뉴 & 레시피 등록</h3>
+                </div>
+                <button onclick="closeModal('addModal')" class="p-1.5 text-stone-400 hover:text-white transition active:scale-90">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Form Content -->
+            <form id="addMenuForm" class="p-5 space-y-4 overflow-y-auto flex-1">
+                <!-- Category -->
+                <div>
+                    <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1.5">카테고리</label>
+                    <select id="formCategory" required class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm font-semibold text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <option value="COFFEE">COFFEE (주황색 영역)</option>
+                        <option value="TEA">TEA (초록색 영역)</option>
+                        <option value="DRINK">DRINK (크림색 영역)</option>
+                    </select>
+                </div>
+
+                <!-- Name & Price -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1.5">메뉴 이름</label>
+                        <input type="text" id="formName" required placeholder="예: 바닐라빈 라떼" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1.5">가격 (천원)</label>
+                        <input type="number" step="0.1" id="formPrice" required placeholder="5.8" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                </div>
+
+                <!-- Ingredients -->
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider">재료 목록</label>
+                        <span class="text-[10px] text-stone-400">한 줄에 하나씩 입력</span>
+                    </div>
+                    <textarea id="formIngredients" rows="3" required placeholder="에스프레소 2샷&#10;바닐라빈 시럽 25g&#10;우유 180ml&#10;얼음 150g" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-xs text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono"></textarea>
+                </div>
+
+                <!-- Steps -->
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider">제조 순서 (단계별)</label>
+                        <span class="text-[10px] text-stone-400">한 줄에 한 단계씩 입력</span>
+                    </div>
+                    <textarea id="formSteps" rows="4" required placeholder="잔 바닥에 바닐라빈 시럽 25g을 넣습니다.&#10;추출한 에스프레소 2샷을 부어 시럽과 잘 저어줍니다.&#10;우유 180ml와 얼음을 가득 채운 후 서빙합니다." class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-xs text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono leading-relaxed"></textarea>
+                </div>
+
+                <!-- Footer Buttons -->
+                <div class="pt-3 flex justify-end gap-2 border-t border-stone-200">
+                    <button type="button" onclick="closeModal('addModal')" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs rounded-xl transition">
+                        취소
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl shadow transition active:scale-95">
+                        메뉴 등록
+                    </button>
+                </div>
+            </form>
         </div>
-      </div>
-    </section>
-  </div>
+    </div>
 
-  <script src="./js/app.js"></script>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 bg-stone-950 text-white px-4 py-3 rounded-2xl shadow-2xl border border-stone-700 flex items-center gap-3 translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toastMsg" class="text-xs sm:text-sm font-medium">알림 메시지</span>
+    </div>
+
+    <!-- Script -->
+    <script>
+        // Initial Image Menu Data
+        const DEFAULT_MENUS = [
+            // COFFEE
+            {
+                id: 'm-1',
+                category: 'COFFEE',
+                name: '아메리카노',
+                price: 4.5,
+                ingredients: ['에스프레소 2샷 (약 36g)', '정수/온수 200ml', '각얼음 150g'],
+                steps: [
+                    '원두(산들 또는 짙은) 선택 후 2샷(36g)을 추출합니다.',
+                    '얼음과 정수 200ml를 잔에 세팅합니다.',
+                    '에스프레소를 정수 위에 부어 풍성한 크레마층을 완성합니다.'
+                ]
+            },
+            {
+                id: 'm-2',
+                category: 'COFFEE',
+                name: '카페라떼',
+                price: 5.5,
+                ingredients: ['에스프레소 2샷', '신선한 우유 180ml', '얼음 150g'],
+                steps: [
+                    '에스프레소 2샷을 추출합니다.',
+                    '유리잔에 얼음과 우유 180ml를 채웁니다.',
+                    '우유 위에 에스프레소를 부어 고소한 그라데이션 레이어를 만듭니다.'
+                ]
+            },
+            {
+                id: 'm-3',
+                category: 'COFFEE',
+                name: '돌체 라떼',
+                price: 5.8,
+                ingredients: ['에스프레소 2샷', '연유 30g', '우유 170ml', '얼음'],
+                steps: [
+                    '잔 바닥에 프리미엄 연유 30g을 담습니다.',
+                    '우유 170ml를 넣고 연유와 함께 살짝 섞어줍니다.',
+                    '얼음을 채운 뒤 추출한 에스프레소 2샷을 부어 마무리합니다.'
+                ]
+            },
+            {
+                id: 'm-4',
+                category: 'COFFEE',
+                name: '바닐라빈 라떼',
+                price: 5.8,
+                ingredients: ['에스프레소 2샷', '수제 바닐라빈 시럽 25g', '우유 180ml', '얼음'],
+                steps: [
+                    '잔 바닥에 바닐라빈 시럽 25g을 담습니다.',
+                    '갓 추출한 에스프레소 2샷을 부어 시럽을 완벽히 녹입니다.',
+                    '우유 180ml와 얼음을 가득 채워 서빙합니다.'
+                ]
+            },
+            {
+                id: 'm-5',
+                category: 'COFFEE',
+                name: '콜드브루',
+                price: 5.0,
+                ingredients: ['콜드브루 원액 60ml', '차가운 정수 180ml', '얼음'],
+                steps: [
+                    '장시간 추출한 콜드브루 원액 60ml를 계량합니다.',
+                    '얼음잔에 찬 물 180ml를 담고 원액을 부어 부드럽게 저어줍니다.'
+                ]
+            },
+            {
+                id: 'm-6',
+                category: 'COFFEE',
+                name: '아포가토',
+                price: 6.0,
+                ingredients: ['프리미엄 바닐라 아이스크림 2스쿱', '에스프레소 1샷'],
+                steps: [
+                    '전용 용기에 바닐라 아이스크림 2스쿱을 깔끔하게 올려놓습니다.',
+                    '갓 추출한 에스프레소 1샷을 샷잔에 준비하여 함께 서빙합니다.'
+                ]
+            },
+            // TEA
+            {
+                id: 'm-7',
+                category: 'TEA',
+                name: '자몽 허니 블랙 티',
+                price: 6.0,
+                ingredients: ['수제 자몽청 50g', '블랙티 추출액 150ml', '꿀 10g', '생자몽 슬라이스 1개'],
+                steps: [
+                    '잔 베이스에 자몽청 50g과 꿀 10g을 넣습니다.',
+                    '진하게 우려낸 블랙티 150ml를 부어 섞습니다.',
+                    '얼음을 채우고 생자몽 슬라이스를 상단에 배치합니다.'
+                ]
+            },
+            {
+                id: 'm-8',
+                category: 'TEA',
+                name: '살구차',
+                price: 5.5,
+                ingredients: ['수제 살구청 55g', '온수 또는 냉수 200ml'],
+                steps: [
+                    '살구 과육이 살아있는 수제청 55g을 넣습니다.',
+                    '물 200ml를 부어 은은한 살구 향이 우러나도록 충분히 저어줍니다.'
+                ]
+            },
+            {
+                id: 'm-9',
+                category: 'TEA',
+                name: '유자차',
+                price: 5.5,
+                ingredients: ['수제 유자청 60g', '물 220ml'],
+                steps: [
+                    '유자청 60g에 물 220ml를 부어 상큼 달콤하게 믹싱합니다.'
+                ]
+            },
+            {
+                id: 'm-10',
+                category: 'TEA',
+                name: '제주하귤, 탱자티',
+                price: 5.0,
+                ingredients: ['제주하귤&탱자 블렌딩청 55g', '물 200ml'],
+                steps: [
+                    '제주하귤&탱자청 55g을 넣고 물 200ml를 믹싱하여 풍부한 감귤향을 냅니다.'
+                ]
+            },
+            // DRINK
+            {
+                id: 'm-11',
+                category: 'DRINK',
+                name: '딸기 에이드 [수제청]',
+                price: 6.0,
+                ingredients: ['수제 딸기청 65g', '탄산수 180ml', '얼음', '생딸기 과육'],
+                steps: [
+                    '유리잔 바닥에 수제 딸기청 65g을 넣습니다.',
+                    '얼음을 채운 뒤 탄산수 180ml를 부어 톡쏘는 청량감을 냅니다.'
+                ]
+            },
+            {
+                id: 'm-12',
+                category: 'DRINK',
+                name: '망고 스무디',
+                price: 6.0,
+                ingredients: ['애플망고 120g', '망고 퓨레 40g', '우유 100ml', '얼음 180g'],
+                steps: [
+                    '모든 재료를 블렌더 용기에 넣고 단단하고 부드럽게 갈아냅니다.',
+                    '높은 스무디 잔에 담아 제공합니다.'
+                ]
+            },
+            {
+                id: 'm-13',
+                category: 'DRINK',
+                name: '오곡 라떼 [논커피]',
+                price: 5.5,
+                ingredients: ['국산 오곡 파우더 35g', '우유 200ml'],
+                steps: [
+                    '오곡 파우더 35g에 따뜻한 우유를 부어 부드럽게 잘 풀어서 제출합니다.'
+                ]
+            }
+        ];
+
+        let menus = [];
+        let activeMenuId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMenus();
+            renderMenuList();
+            setupEventListeners();
+            lucide.createIcons();
+        });
+
+        function loadMenus() {
+            const saved = localStorage.getItem('girok_menus');
+            if (saved) {
+                try {
+                    menus = JSON.parse(saved);
+                } catch(e) {
+                    menus = [...DEFAULT_MENUS];
+                }
+            } else {
+                menus = [...DEFAULT_MENUS];
+                saveMenus();
+            }
+        }
+
+        function saveMenus() {
+            localStorage.setItem('girok_menus', JSON.stringify(menus));
+        }
+
+        function renderMenuList() {
+            const categories = ['COFFEE', 'TEA', 'DRINK'];
+
+            categories.forEach(cat => {
+                const container = document.getElementById(`list-${cat}`);
+                if (!container) return;
+
+                const filtered = menus.filter(m => m.category === cat);
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `<p class="text-xs italic opacity-60 py-3 text-center">등록된 메뉴가 없습니다.</p>`;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(item => `
+                    <div onclick="openRecipeModal('${item.id}')" 
+                         class="menu-touch-item flex justify-between items-center px-3 py-2.5 rounded-xl cursor-pointer font-semibold text-sm hover:bg-white/20 transition-all group">
+                        <span class="flex items-center gap-2">
+                            <span class="text-stone-900 group-hover:translate-x-1 transition-transform">${item.name}</span>
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-stone-900">${item.price.toFixed(1)}</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-stone-700/60 group-hover:text-stone-900 transition"></i>
+                        </div>
+                    </div>
+                `).join('');
+            });
+
+            lucide.createIcons();
+        }
+
+        function openRecipeModal(id) {
+            const menu = menus.find(m => m.id === id);
+            if (!menu) return;
+
+            activeMenuId = id;
+
+            const modalHeader = document.getElementById('recipeModalHeader');
+            const categoryTag = document.getElementById('recipeCategoryTag');
+            const titleEl = document.getElementById('recipeTitle');
+            const priceEl = document.getElementById('recipePrice');
+            const ingredientsEl = document.getElementById('recipeIngredients');
+            const stepsEl = document.getElementById('recipeSteps');
+
+            if (menu.category === 'COFFEE') {
+                modalHeader.className = 'p-5 sm:p-6 text-white flex justify-between items-start relative girok-orange';
+            } else if (menu.category === 'TEA') {
+                modalHeader.className = 'p-5 sm:p-6 text-white flex justify-between items-start relative girok-green';
+            } else {
+                modalHeader.className = 'p-5 sm:p-6 text-stone-900 flex justify-between items-start relative girok-cream';
+            }
+
+            categoryTag.innerText = menu.category;
+            titleEl.innerText = menu.name;
+            priceEl.innerText = `${menu.price.toFixed(1)} (₩ ${(menu.price * 1000).toLocaleString()})`;
+
+            ingredientsEl.innerHTML = menu.ingredients.map(ing => `
+                <li class="flex items-start gap-2">
+                    <span class="text-amber-600 font-bold">•</span>
+                    <span>${ing}</span>
+                </li>
+            `).join('');
+
+            stepsEl.innerHTML = menu.steps.map((step, idx) => `
+                <li class="flex items-start gap-3 bg-stone-50 p-3 rounded-xl border border-stone-200/80">
+                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-stone-900 text-white font-bold text-xs flex items-center justify-center">${idx + 1}</span>
+                    <span class="leading-relaxed text-xs sm:text-sm mt-0.5">${step}</span>
+                </li>
+            `).join('');
+
+            openModal('recipeModal');
+        }
+
+        function setupEventListeners() {
+            // Mobile Tab Filters
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const cat = e.currentTarget.getAttribute('data-cat');
+                    
+                    document.querySelectorAll('.tab-btn').forEach(b => {
+                        b.classList.remove('bg-amber-500', 'text-stone-950');
+                        b.classList.add('bg-stone-800', 'text-stone-300');
+                    });
+
+                    e.currentTarget.classList.remove('bg-stone-800', 'text-stone-300');
+                    e.currentTarget.classList.add('bg-amber-500', 'text-stone-950');
+
+                    const panels = document.querySelectorAll('.category-panel');
+                    panels.forEach(p => {
+                        if (cat === 'ALL') {
+                            p.classList.remove('hidden');
+                        } else {
+                            if (p.id === `panel-${cat}` || p.id === 'panel-BRAND') {
+                                p.classList.remove('hidden');
+                            } else {
+                                p.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Add Modal
+            document.getElementById('openAddModalBtn').addEventListener('click', () => {
+                document.getElementById('addMenuForm').reset();
+                openModal('addModal');
+            });
+
+            // Form Submit
+            document.getElementById('addMenuForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const category = document.getElementById('formCategory').value;
+                const name = document.getElementById('formName').value.trim();
+                const price = parseFloat(document.getElementById('formPrice').value);
+                
+                const ingredients = document.getElementById('formIngredients').value
+                    .split('\n')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0);
+
+                const steps = document.getElementById('formSteps').value
+                    .split('\n')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0);
+
+                const newMenu = {
+                    id: 'm-' + Date.now(),
+                    category,
+                    name,
+                    price,
+                    ingredients,
+                    steps
+                };
+
+                menus.push(newMenu);
+                saveMenus();
+                renderMenuList();
+                closeModal('addModal');
+                showToast(`'${name}' 메뉴가 추가되었습니다.`);
+            });
+
+            // Delete
+            document.getElementById('deleteMenuBtn').addEventListener('click', () => {
+                if (!activeMenuId) return;
+                const target = menus.find(m => m.id === activeMenuId);
+                if (!target) return;
+
+                if (confirm(`'${target.name}' 메뉴를 삭제하시겠습니까?`)) {
+                    menus = menus.filter(m => m.id !== activeMenuId);
+                    saveMenus();
+                    renderMenuList();
+                    closeModal('recipeModal');
+                    showToast('메뉴가 삭제되었습니다.');
+                }
+            });
+
+            // Reset
+            document.getElementById('resetDataBtn').addEventListener('click', () => {
+                if (confirm('모든 메뉴 데이터를 초기 설정으로 복원하시겠습니까?')) {
+                    menus = [...DEFAULT_MENUS];
+                    saveMenus();
+                    renderMenuList();
+                    showToast('기본 메뉴로 복원되었습니다.');
+                }
+            });
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

@@ -63,7 +63,7 @@
         /* Glassmorphism helpers */
         .glass-dark {
             background: rgba(18, 18, 18, 0.85);
-            backdrop-filter: blur(12px);
+            backdrop-blur: blur(12px);
         }
     </style>
 </head>
@@ -76,7 +76,7 @@
             <div class="flex items-center gap-3">
                 <span class="text-2xl font-black tracking-tighter text-amber-500">girok</span>
                 <span class="hidden sm:inline-block text-xs bg-stone-800 text-stone-300 px-2.5 py-1 rounded-full font-medium border border-stone-700">
-                    스마트 메뉴 & 레시피 매니저
+                    스마트 메뉴 & HOT/ICED 레시피 매니저
                 </span>
             </div>
 
@@ -133,7 +133,7 @@
                     </div>
                     <div class="pt-2 text-[11px] text-stone-500 border-t border-stone-800/60 flex items-center gap-1.5">
                         <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 text-amber-500 flex-shrink-0"></i>
-                        <span>메뉴 터치 시 만드는 레시피가 표시됩니다.</span>
+                        <span>메뉴 터치 시 HOT / ICED 레시피가 표시됩니다.</span>
                     </div>
                 </div>
             </section>
@@ -209,7 +209,7 @@
         </main>
     </div>
 
-    <!-- RECIPE VIEW MODAL / BOTTOM SHEET FOR MOBILE -->
+    <!-- RECIPE VIEW MODAL / BOTTOM SHEET FOR MOBILE (HOT / ICED 탭 포함) -->
     <div id="recipeModal" class="fixed inset-0 bg-stone-950/75 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all">
         <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden border border-stone-200 transform transition-all animate-in slide-in-from-bottom sm:zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
             
@@ -224,6 +224,16 @@
                 </div>
                 <button onclick="closeModal('recipeModal')" class="p-2 rounded-full bg-black/10 hover:bg-black/20 text-white transition active:scale-90">
                     <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- HOT / ICED 탭 전환 버튼 -->
+            <div class="grid grid-cols-2 bg-stone-100 p-1.5 border-b border-stone-200 flex-shrink-0">
+                <button id="tabHotBtn" onclick="switchRecipeTab('hot')" class="py-2.5 text-xs font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 shadow-sm bg-red-500 text-white">
+                    🔥 HOT 레시피
+                </button>
+                <button id="tabIcedBtn" onclick="switchRecipeTab('iced')" class="py-2.5 text-xs font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 text-stone-600 hover:text-stone-900 bg-transparent">
+                    ❄️ ICED 레시피
                 </button>
             </div>
 
@@ -262,7 +272,7 @@
         </div>
     </div>
 
-    <!-- ADD/EDIT MENU FORM MODAL -->
+    <!-- ADD/EDIT MENU FORM MODAL (HOT / ICED 각각 입력 폼) -->
     <div id="addModal" class="fixed inset-0 bg-stone-950/75 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all">
         <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden border border-stone-200 max-h-[92vh] flex flex-col">
             
@@ -270,7 +280,7 @@
             <div class="p-4 sm:p-5 bg-stone-950 text-white flex justify-between items-center flex-shrink-0">
                 <div class="flex items-center gap-2">
                     <i data-lucide="plus-circle" class="w-5 h-5 text-amber-500"></i>
-                    <h3 class="text-base sm:text-lg font-bold">새 메뉴 & 레시피 등록</h3>
+                    <h3 class="text-base sm:text-lg font-bold">새 메뉴 & HOT/ICED 레시피 등록</h3>
                 </div>
                 <button onclick="closeModal('addModal')" class="p-1.5 text-stone-400 hover:text-white transition active:scale-90">
                     <i data-lucide="x" class="w-5 h-5"></i>
@@ -293,30 +303,42 @@
                 <div class="grid grid-cols-3 gap-3">
                     <div class="col-span-2">
                         <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1.5">메뉴 이름</label>
-                        <input type="text" id="formName" required placeholder="예: 바닐라빈 라떼" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <input type="text" id="formName" required placeholder="예: 카페라떼" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1.5">가격 (천원)</label>
-                        <input type="number" step="0.1" id="formPrice" required placeholder="5.8" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <input type="number" step="0.1" id="formPrice" required placeholder="5.5" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
                     </div>
                 </div>
 
-                <!-- Ingredients -->
-                <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                        <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider">재료 목록</label>
-                        <span class="text-[10px] text-stone-400">한 줄에 하나씩 입력</span>
+                <!-- HOT 레시피 입력 박스 -->
+                <div class="p-4 bg-red-50/60 rounded-2xl border border-red-200 space-y-3">
+                    <h4 class="text-xs font-black text-red-600 uppercase tracking-wider flex items-center gap-1.5">
+                        🔥 HOT 레시피 작성
+                    </h4>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-600 mb-1">HOT 재료 (한 줄에 하나씩)</label>
+                        <textarea id="formHotIngredients" rows="2" placeholder="에스프레소 2샷&#10;스팀 우유 200ml" class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono"></textarea>
                     </div>
-                    <textarea id="formIngredients" rows="3" required placeholder="에스프레소 2샷&#10;바닐라빈 시럽 25g&#10;우유 180ml&#10;얼음 150g" class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-xs text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono"></textarea>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-600 mb-1">HOT 제조 순서</label>
+                        <textarea id="formHotSteps" rows="2" placeholder="1. 잔에 에스프레소를 담습니다.&#10;2. 스팀 우유를 부어 완성합니다." class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono"></textarea>
+                    </div>
                 </div>
 
-                <!-- Steps -->
-                <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                        <label class="block text-xs font-bold text-stone-600 uppercase tracking-wider">제조 순서 (단계별)</label>
-                        <span class="text-[10px] text-stone-400">한 줄에 한 단계씩 입력</span>
+                <!-- ICED 레시피 입력 박스 -->
+                <div class="p-4 bg-blue-50/60 rounded-2xl border border-blue-200 space-y-3">
+                    <h4 class="text-xs font-black text-blue-600 uppercase tracking-wider flex items-center gap-1.5">
+                        ❄️ ICED 레시피 작성
+                    </h4>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-600 mb-1">ICED 재료 (한 줄에 하나씩)</label>
+                        <textarea id="formIcedIngredients" rows="2" placeholder="에스프레소 2샷&#10;우유 180ml&#10;얼음 150g" class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono"></textarea>
                     </div>
-                    <textarea id="formSteps" rows="4" required placeholder="잔 바닥에 바닐라빈 시럽 25g을 넣습니다.&#10;추출한 에스프레소 2샷을 부어 시럽과 잘 저어줍니다.&#10;우유 180ml와 얼음을 가득 채운 후 서빙합니다." class="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-300 rounded-xl text-xs text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono leading-relaxed"></textarea>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-600 mb-1">ICED 제조 순서</label>
+                        <textarea id="formIcedSteps" rows="2" placeholder="1. 잔에 얼음과 우유를 담습니다.&#10;2. 에스프레소를 부어 완성합니다." class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono"></textarea>
+                    </div>
                 </div>
 
                 <!-- Footer Buttons -->
@@ -325,7 +347,7 @@
                         취소
                     </button>
                     <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl shadow transition active:scale-95">
-                        메뉴 등록
+                        메뉴 및 레시피 등록
                     </button>
                 </div>
             </form>
@@ -340,160 +362,83 @@
 
     <!-- Script -->
     <script>
-        // Initial Image Menu Data
+        // 초기 기본 메뉴 데이터 (HOT / ICED 개별 레시피 탑재)
         const DEFAULT_MENUS = [
-            // COFFEE
             {
                 id: 'm-1',
                 category: 'COFFEE',
                 name: '아메리카노',
                 price: 4.5,
-                ingredients: ['에스프레소 2샷 (약 36g)', '정수/온수 200ml', '각얼음 150g'],
-                steps: [
-                    '원두(산들 또는 짙은) 선택 후 2샷(36g)을 추출합니다.',
-                    '얼음과 정수 200ml를 잔에 세팅합니다.',
-                    '에스프레소를 정수 위에 부어 풍성한 크레마층을 완성합니다.'
-                ]
+                hot: {
+                    ingredients: ['에스프레소 2샷 (약 36g)', '온수 200ml'],
+                    steps: ['원두(산들 또는 짙은) 선택 후 2샷을 추출합니다.', '온수 200ml를 컵에 담고 에스프레소를 부어 완성합니다.']
+                },
+                iced: {
+                    ingredients: ['에스프레소 2샷 (약 36g)', '정수 180ml', '각얼음 150g'],
+                    steps: ['얼음과 정수 180ml를 잔에 세팅합니다.', '에스프레소를 부어 풍성한 크레마층을 완성합니다.']
+                }
             },
             {
                 id: 'm-2',
                 category: 'COFFEE',
                 name: '카페라떼',
                 price: 5.5,
-                ingredients: ['에스프레소 2샷', '신선한 우유 180ml', '얼음 150g'],
-                steps: [
-                    '에스프레소 2샷을 추출합니다.',
-                    '유리잔에 얼음과 우유 180ml를 채웁니다.',
-                    '우유 위에 에스프레소를 부어 고소한 그라데이션 레이어를 만듭니다.'
-                ]
+                hot: {
+                    ingredients: ['에스프레소 2샷', '스팀 우유 200ml'],
+                    steps: ['에스프레소 2샷을 컵에 추출합니다.', '알맞게 스팀된 우유를 부어 부드럽게 완성합니다.']
+                },
+                iced: {
+                    ingredients: ['에스프레소 2샷', '신선한 우유 180ml', '얼음 150g'],
+                    steps: ['유리잔에 얼음과 우유 180ml를 채웁니다.', '우유 위에 에스프레소를 부어 그라데이션을 만듭니다.']
+                }
             },
             {
                 id: 'm-3',
                 category: 'COFFEE',
-                name: '돌체 라떼',
+                name: '바닐라빈 라떼',
                 price: 5.8,
-                ingredients: ['에스프레소 2샷', '연유 30g', '우유 170ml', '얼음'],
-                steps: [
-                    '잔 바닥에 프리미엄 연유 30g을 담습니다.',
-                    '우유 170ml를 넣고 연유와 함께 살짝 섞어줍니다.',
-                    '얼음을 채운 뒤 추출한 에스프레소 2샷을 부어 마무리합니다.'
-                ]
+                hot: {
+                    ingredients: ['에스프레소 2샷', '수제 바닐라빈 시럽 25g', '스팀 우유 190ml'],
+                    steps: ['잔 바닥에 바닐라빈 시럽 25g을 담습니다.', '에스프레소를 부어 녹인 뒤 스팀 우유를 부어줍니다.']
+                },
+                iced: {
+                    ingredients: ['에스프레소 2샷', '수제 바닐라빈 시럽 25g', '우유 180ml', '얼음'],
+                    steps: ['잔 바닥에 바닐라빈 시럽과 에스프레소를 섞습니다.', '우유와 얼음을 가득 채워 서빙합니다.']
+                }
             },
             {
                 id: 'm-4',
-                category: 'COFFEE',
-                name: '바닐라빈 라떼',
-                price: 5.8,
-                ingredients: ['에스프레소 2샷', '수제 바닐라빈 시럽 25g', '우유 180ml', '얼음'],
-                steps: [
-                    '잔 바닥에 바닐라빈 시럽 25g을 담습니다.',
-                    '갓 추출한 에스프레소 2샷을 부어 시럽을 완벽히 녹입니다.',
-                    '우유 180ml와 얼음을 가득 채워 서빙합니다.'
-                ]
-            },
-            {
-                id: 'm-5',
-                category: 'COFFEE',
-                name: '콜드브루',
-                price: 5.0,
-                ingredients: ['콜드브루 원액 60ml', '차가운 정수 180ml', '얼음'],
-                steps: [
-                    '장시간 추출한 콜드브루 원액 60ml를 계량합니다.',
-                    '얼음잔에 찬 물 180ml를 담고 원액을 부어 부드럽게 저어줍니다.'
-                ]
-            },
-            {
-                id: 'm-6',
-                category: 'COFFEE',
-                name: '아포가토',
-                price: 6.0,
-                ingredients: ['프리미엄 바닐라 아이스크림 2스쿱', '에스프레소 1샷'],
-                steps: [
-                    '전용 용기에 바닐라 아이스크림 2스쿱을 깔끔하게 올려놓습니다.',
-                    '갓 추출한 에스프레소 1샷을 샷잔에 준비하여 함께 서빙합니다.'
-                ]
-            },
-            // TEA
-            {
-                id: 'm-7',
                 category: 'TEA',
                 name: '자몽 허니 블랙 티',
                 price: 6.0,
-                ingredients: ['수제 자몽청 50g', '블랙티 추출액 150ml', '꿀 10g', '생자몽 슬라이스 1개'],
-                steps: [
-                    '잔 베이스에 자몽청 50g과 꿀 10g을 넣습니다.',
-                    '진하게 우려낸 블랙티 150ml를 부어 섞습니다.',
-                    '얼음을 채우고 생자몽 슬라이스를 상단에 배치합니다.'
-                ]
+                hot: {
+                    ingredients: ['수제 자몽청 50g', '블랙티 200ml', '꿀 10g'],
+                    steps: ['따뜻하게 우려낸 블랙티에 자몽청과 꿀을 타서 완성합니다.']
+                },
+                iced: {
+                    ingredients: ['수제 자몽청 50g', '블랙티 추출액 150ml', '꿀 10g', '생자몽 슬라이스 1개', '얼음'],
+                    steps: ['잔 베이스에 자몽청과 꿀을 넣고 블랙티를 부어 섞습니다.', '얼음을 채우고 자몽 슬라이스를 올립니다.']
+                }
             },
             {
-                id: 'm-8',
-                category: 'TEA',
-                name: '살구차',
-                price: 5.5,
-                ingredients: ['수제 살구청 55g', '온수 또는 냉수 200ml'],
-                steps: [
-                    '살구 과육이 살아있는 수제청 55g을 넣습니다.',
-                    '물 200ml를 부어 은은한 살구 향이 우러나도록 충분히 저어줍니다.'
-                ]
-            },
-            {
-                id: 'm-9',
-                category: 'TEA',
-                name: '유자차',
-                price: 5.5,
-                ingredients: ['수제 유자청 60g', '물 220ml'],
-                steps: [
-                    '유자청 60g에 물 220ml를 부어 상큼 달콤하게 믹싱합니다.'
-                ]
-            },
-            {
-                id: 'm-10',
-                category: 'TEA',
-                name: '제주하귤, 탱자티',
-                price: 5.0,
-                ingredients: ['제주하귤&탱자 블렌딩청 55g', '물 200ml'],
-                steps: [
-                    '제주하귤&탱자청 55g을 넣고 물 200ml를 믹싱하여 풍부한 감귤향을 냅니다.'
-                ]
-            },
-            // DRINK
-            {
-                id: 'm-11',
+                id: 'm-5',
                 category: 'DRINK',
                 name: '딸기 에이드 [수제청]',
                 price: 6.0,
-                ingredients: ['수제 딸기청 65g', '탄산수 180ml', '얼음', '생딸기 과육'],
-                steps: [
-                    '유리잔 바닥에 수제 딸기청 65g을 넣습니다.',
-                    '얼음을 채운 뒤 탄산수 180ml를 부어 톡쏘는 청량감을 냅니다.'
-                ]
-            },
-            {
-                id: 'm-12',
-                category: 'DRINK',
-                name: '망고 스무디',
-                price: 6.0,
-                ingredients: ['애플망고 120g', '망고 퓨레 40g', '우유 100ml', '얼음 180g'],
-                steps: [
-                    '모든 재료를 블렌더 용기에 넣고 단단하고 부드럽게 갈아냅니다.',
-                    '높은 스무디 잔에 담아 제공합니다.'
-                ]
-            },
-            {
-                id: 'm-13',
-                category: 'DRINK',
-                name: '오곡 라떼 [논커피]',
-                price: 5.5,
-                ingredients: ['국산 오곡 파우더 35g', '우유 200ml'],
-                steps: [
-                    '오곡 파우더 35g에 따뜻한 우유를 부어 부드럽게 잘 풀어서 제출합니다.'
-                ]
+                hot: {
+                    ingredients: ['딸기청 (따뜻한 음료용 불가)'],
+                    steps: ['본 메뉴는 아이스 전용 음료입니다.']
+                },
+                iced: {
+                    ingredients: ['수제 딸기청 65g', '탄산수 180ml', '얼음'],
+                    steps: ['유리잔 바닥에 수제 딸기청 65g을 넣습니다.', '얼음을 채운 뒤 탄산수를 부어 톡쏘는 청량감을 냅니다.']
+                }
             }
         ];
 
         let menus = [];
         let activeMenuId = null;
+        let currentRecipeTab = 'hot'; // 모달에서 현재 보고 있는 온도 탭 ('hot' 또는 'iced')
 
         document.addEventListener('DOMContentLoaded', () => {
             loadMenus();
@@ -503,7 +448,7 @@
         });
 
         function loadMenus() {
-            const saved = localStorage.getItem('girok_menus');
+            const saved = localStorage.getItem('girok_menus_v5');
             if (saved) {
                 try {
                     menus = JSON.parse(saved);
@@ -517,7 +462,7 @@
         }
 
         function saveMenus() {
-            localStorage.setItem('girok_menus', JSON.stringify(menus));
+            localStorage.setItem('girok_menus_v5', JSON.stringify(menus));
         }
 
         function renderMenuList() {
@@ -556,11 +501,24 @@
             if (!menu) return;
 
             activeMenuId = id;
+            currentRecipeTab = 'hot'; // 기본적으로 HOT 레시피를 먼저 보여줌
+            updateModalView(menu);
+            openModal('recipeModal');
+        }
 
+        function switchRecipeTab(tab) {
+            currentRecipeTab = tab;
+            const menu = menus.find(m => m.id === activeMenuId);
+            if (menu) updateModalView(menu);
+        }
+
+        function updateModalView(menu) {
             const modalHeader = document.getElementById('recipeModalHeader');
             const categoryTag = document.getElementById('recipeCategoryTag');
             const titleEl = document.getElementById('recipeTitle');
             const priceEl = document.getElementById('recipePrice');
+            const tabHotBtn = document.getElementById('tabHotBtn');
+            const tabIcedBtn = document.getElementById('tabIcedBtn');
             const ingredientsEl = document.getElementById('recipeIngredients');
             const stepsEl = document.getElementById('recipeSteps');
 
@@ -576,21 +534,30 @@
             titleEl.innerText = menu.name;
             priceEl.innerText = `${menu.price.toFixed(1)} (₩ ${(menu.price * 1000).toLocaleString()})`;
 
-            ingredientsEl.innerHTML = menu.ingredients.map(ing => `
+            // 탭 버튼 스타일 전환
+            if (currentRecipeTab === 'hot') {
+                tabHotBtn.className = 'py-2.5 text-xs font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 shadow-sm bg-red-500 text-white';
+                tabIcedBtn.className = 'py-2.5 text-xs font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 text-stone-600 hover:text-stone-900 bg-transparent';
+            } else {
+                tabHotBtn.className = 'py-2.5 text-xs font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 text-stone-600 hover:text-stone-900 bg-transparent';
+                tabIcedBtn.className = 'py-2.5 text-xs font-bold rounded-xl transition text-center flex items-center justify-center gap-1.5 shadow-sm bg-blue-500 text-white';
+            }
+
+            const targetRecipe = currentRecipeTab === 'hot' ? menu.hot : menu.iced;
+
+            ingredientsEl.innerHTML = targetRecipe.ingredients.map(ing => `
                 <li class="flex items-start gap-2">
                     <span class="text-amber-600 font-bold">•</span>
                     <span>${ing}</span>
                 </li>
             `).join('');
 
-            stepsEl.innerHTML = menu.steps.map((step, idx) => `
+            stepsEl.innerHTML = targetRecipe.steps.map((step, idx) => `
                 <li class="flex items-start gap-3 bg-stone-50 p-3 rounded-xl border border-stone-200/80">
                     <span class="flex-shrink-0 w-5 h-5 rounded-full bg-stone-900 text-white font-bold text-xs flex items-center justify-center">${idx + 1}</span>
                     <span class="leading-relaxed text-xs sm:text-sm mt-0.5">${step}</span>
                 </li>
             `).join('');
-
-            openModal('recipeModal');
         }
 
         function setupEventListeners() {
@@ -622,10 +589,20 @@
                 });
             });
 
-            // Add Modal
+            // Add Modal Open
             document.getElementById('openAddModalBtn').addEventListener('click', () => {
                 document.getElementById('addMenuForm').reset();
                 openModal('addModal');
+            });
+
+            // Reset Data Button
+            document.getElementById('resetDataBtn').addEventListener('click', () => {
+                if (confirm('기본 메뉴 데이터로 초기화하시겠습니까?')) {
+                    menus = [...DEFAULT_MENUS];
+                    saveMenus();
+                    renderMenuList();
+                    showToast('기본 메뉴가 복원되었습니다.');
+                }
             });
 
             // Form Submit
@@ -636,23 +613,24 @@
                 const name = document.getElementById('formName').value.trim();
                 const price = parseFloat(document.getElementById('formPrice').value);
                 
-                const ingredients = document.getElementById('formIngredients').value
-                    .split('\n')
-                    .map(s => s.trim())
-                    .filter(s => s.length > 0);
-
-                const steps = document.getElementById('formSteps').value
-                    .split('\n')
-                    .map(s => s.trim())
-                    .filter(s => s.length > 0);
+                const hotIng = document.getElementById('formHotIngredients').value.split('\n').map(s => s.trim()).filter(Boolean);
+                const hotStep = document.getElementById('formHotSteps').value.split('\n').map(s => s.trim()).filter(Boolean);
+                const icedIng = document.getElementById('formIcedIngredients').value.split('\n').map(s => s.trim()).filter(Boolean);
+                const icedStep = document.getElementById('formIcedSteps').value.split('\n').map(s => s.trim()).filter(Boolean);
 
                 const newMenu = {
                     id: 'm-' + Date.now(),
                     category,
                     name,
                     price,
-                    ingredients,
-                    steps
+                    hot: {
+                        ingredients: hotIng.length ? hotIng : ['정보 없음'],
+                        steps: hotStep.length ? hotStep : ['정보 없음']
+                    },
+                    iced: {
+                        ingredients: icedIng.length ? icedIng : ['정보 없음'],
+                        steps: icedStep.length ? icedStep : ['정보 없음']
+                    }
                 };
 
                 menus.push(newMenu);
@@ -662,13 +640,13 @@
                 showToast(`'${name}' 메뉴가 추가되었습니다.`);
             });
 
-            // Delete
+            // Delete Menu Button
             document.getElementById('deleteMenuBtn').addEventListener('click', () => {
                 if (!activeMenuId) return;
                 const target = menus.find(m => m.id === activeMenuId);
                 if (!target) return;
 
-                if (confirm(`'${target.name}' 메뉴를 삭제하시겠습니까?`)) {
+                if (confirm(`'${target.name}' 메뉴를 정말 삭제하시겠습니까?`)) {
                     menus = menus.filter(m => m.id !== activeMenuId);
                     saveMenus();
                     renderMenuList();
@@ -676,40 +654,23 @@
                     showToast('메뉴가 삭제되었습니다.');
                 }
             });
-
-            // Reset
-            document.getElementById('resetDataBtn').addEventListener('click', () => {
-                if (confirm('모든 메뉴 데이터를 초기 설정으로 복원하시겠습니까?')) {
-                    menus = [...DEFAULT_MENUS];
-                    saveMenus();
-                    renderMenuList();
-                    showToast('기본 메뉴로 복원되었습니다.');
-                }
-            });
         }
 
-        function openModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) modal.classList.remove('hidden');
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
         }
 
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) modal.classList.add('hidden');
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
         }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            toastMsg.innerText = msg;
-
+            document.getElementById('toastMsg').innerText = msg;
             toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
             setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            }, 2500);
         }
     </script>
 </body>

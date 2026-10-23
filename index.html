@@ -188,7 +188,15 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
         <h2>오시는 길</h2>
         <dl class="info">
           <dt>ADDRESS</dt><dd>[인천광역시 ○○구 ○○로 00]</dd>
-          <dt>HOURS</dt><dd>[매일 11:00 – 21:00 / 휴무: 월요일]</dd>
+          <dt>HOURS</dt>
+<dd>
+  <table class="hours">
+    <tr><th>월 · 수 · 목 · 금 · 토</th><td>09:00 – 21:00<small>Last order 20:50</small></td></tr>
+    <tr><th>화</th><td>09:00 – 17:00<small>Last order 16:50</small></td></tr>
+    <tr><th>일</th><td>12:30 – 20:00<small>Last order 19:50</small></td></tr>
+  </table>
+  <p class="notice">정기 휴무일은 없으며, 휴무 시 미리 공지합니다.</p>
+</dd>
           <dt>PARKING</dt><dd>[주차 안내]</dd>
           <dt>CONTACT</dt><dd>[010-0000-0000]</dd>
         </dl>

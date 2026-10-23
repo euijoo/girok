@@ -1,228 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>카페_기록 : cafe girok  </title>
-<meta name="description" content="girok은 인천에서 커피를 기록하는 브랜드입니다. 원두, 공간, 이야기를 함께 소개합니다.">
-<meta property="og:title" content="girok">
-<meta property="og:description" content="인천에서 커피를 기록합니다.">
-<meta property="og:image" content="images/og.jpg">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-<style>
-:root{
-  --bg:#f5f1ea; --ink:#1c1a17; --sub:#6f685e; --line:#d9d2c5; --accent:#8a5a3b;
-  --max:1080px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-section{padding:88px 0;border-top:1px solid var(--line)}
-.label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
-h2{font-size:clamp(24px,4vw,34px);font-weight:600;line-height:1.35;margin-bottom:24px}
-p.lead{color:var(--sub);max-width:560px}
-
-/* header */
-header{position:sticky;top:0;z-index:10;background:rgba(245,241,234,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav{display:flex;justify-content:space-between;align-items:center;height:60px}
-.logo{font-size:20px;font-weight:700;letter-spacing:.08em}
-nav ul{display:flex;gap:22px;list-style:none;font-size:14px}
-nav a:hover{color:var(--accent)}
-
-/* hero */
-.hero{
-  min-height:88vh;
-  padding:0;
-  border-top:none;
-  background:url('images/hero.jpg') center/cover no-repeat #3a332b;
-}
-
-/* buttons */
-.btns{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap}
-.btn{padding:13px 26px;border:1px solid currentColor;font-size:14px;transition:.2s}
-.btn.dark:hover{background:var(--ink);color:#fff}
-
-/* records */
-.records{list-style:none;border-top:1px solid var(--ink)}
-.records li{border-bottom:1px solid var(--line)}
-.records a{display:grid;grid-template-columns:90px 1fr;gap:8px 20px;padding:22px 0;transition:.2s}
-.records a:hover{padding-left:10px;color:var(--accent)}
-.rec-no{font-size:13px;color:var(--sub)}
-.rec-title{font-size:18px;font-weight:600}
-.tags{grid-column:2;display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--sub)}
-.tags span{border:1px solid var(--line);padding:2px 10px;border-radius:99px}
-.more{display:inline-block;margin-top:24px;font-size:14px;border-bottom:1px solid var(--ink)}
-
-/* cards */
-.grid{display:grid;gap:24px;grid-template-columns:1fr}
-.card .ph{aspect-ratio:4/5;background:#e4ddd0 center/cover;margin-bottom:14px}
-.card h3{font-size:17px;font-weight:600}
-.card p{font-size:14px;color:var(--sub)}
-.card small{font-size:12px;color:var(--accent)}
-
-/* visit */
-.info{display:grid;gap:12px;font-size:15px;margin-top:8px;max-width:520px}
-.info dt{font-size:12px;color:var(--sub);letter-spacing:.1em}
-.info dd{margin-bottom:10px}
-.hours{border-collapse:collapse;width:100%;font-size:15px}
-.hours th,.hours td{padding:10px 0;border-bottom:1px solid var(--line);text-align:left;font-weight:400;vertical-align:top}
-.hours th{color:var(--sub);width:46%;padding-right:12px}
-.hours small{display:block;font-size:12px;color:var(--sub)}
-.notice{font-size:13px;color:var(--accent);margin-top:10px}
-
-footer{padding:40px 0;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
-footer .wrap{display:flex;flex-direction:column;gap:6px}
-
-@media(min-width:768px){
-  .grid.three{grid-template-columns:repeat(3,1fr)}
-  .grid.two{grid-template-columns:repeat(2,1fr)}
-  .split{display:grid;grid-template-columns:1fr 1fr;gap:64px}
-}
-@media(max-width:600px){
-  nav ul{gap:14px;font-size:13px}
-  .records a{grid-template-columns:1fr}
-  .tags{grid-column:1}
-  .hero{min-height:70vh}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="GIROK COFFEE — 커피와 공간, 일상의 장면을 담는 카페.">
+  <meta property="og:title" content="GIROK COFFEE">
+  <meta property="og:description" content="Coffee, space, and everyday moments.">
+  <meta property="og:type" content="website">
+  <title>GIROK COFFEE — Coffee, Space, Everyday Moments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<header>
-  <div class="wrap nav">
-    <a href="#top" class="logo">girok</a>
-    <nav>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#records">Records</a></li>
-        <li><a href="#products">Products</a></li>
-        <li><a href="#space">Space</a></li>
-        <li><a href="#visit">Visit</a></li>
-      </ul>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="GIROK 홈">
+      <img src="assets/girok-logo-transparent.png" alt="girok coffee">
+    </a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">MENU <span>＋</span></button>
+    <nav id="site-nav" class="site-nav" aria-label="주요 메뉴">
+      <a href="#coffee">COFFEE</a>
+      <a href="#space">SPACE / JOURNAL</a>
+      <a href="#visit">VISIT</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main id="top">
-
-  <section class="hero" role="img" aria-label="girok 카페 대표 사진"></section>
-
-  <section id="about">
-    <div class="wrap split">
-      <div>
-        <div class="label">About</div>
-        <h2>기억에 남는 한 잔, 기록이 되는 시간</h2>
+  <main id="top">
+    <section class="hero section-wrap">
+      <div class="hero-kicker"><span class="eyebrow">INDEPENDENT COFFEE SPACE</span><span class="index">INCHEON · KR</span></div>
+      <div class="hero-copy">
+        <p class="eyebrow">GIROK COFFEE</p>
+        <h1>Coffee, space,<br><em>and everyday</em><br>moments.</h1>
+        <p class="hero-ko">커피와 공간, 일상의 장면을 담는 GIROK.</p>
       </div>
-      <p class="lead">하루를 기록하는 커피
-girok은 '기록'이라는 이름처럼, 커피 한 잔이 하루의 한 장면이 되기를 바랍니다.
-조용히 곁에 머물다 어느새 일상의 일부가 되는 커피를 내립니다.</p>
-    </div>
-  </section>
+      <figure class="hero-image">
+        <img src="assets/girok-interior.webp" alt="따뜻한 목재 선반과 커피 장비가 있는 GIROK 매장 내부">
+        <figcaption><span>01 — THE COUNTER</span><span>GIROK COFFEE</span></figcaption>
+      </figure>
+      <div class="hero-bottom"><span>GOOD COFFEE, CONSIDERED SPACE.</span><a href="#coffee">EXPLORE GIROK <span>↘</span></a></div>
+    </section>
 
-  <section id="records">
-    <div class="wrap">
-      <div class="label">Records</div>
-      <h2>쌓아 가는 커피의 기록</h2>
-      <ul class="records">
-        <li><a href="records/001.html">
-          <span class="rec-no">No. 001</span>
-          <span class="rec-title">[첫 번째 기록 제목]</span>
-          <div class="tags"><span>원두</span><span>[원두 이름]</span><span>[공간]</span></div>
-        </a></li>
-        <li><a href="records/002.html">
-          <span class="rec-no">No. 002</span>
-          <span class="rec-title">[두 번째 기록 제목]</span>
-          <div class="tags"><span>로스팅</span><span>[원두 이름]</span></div>
-        </a></li>
-        <li><a href="records/003.html">
-          <span class="rec-no">No. 003</span>
-          <span class="rec-title">[세 번째 기록 제목]</span>
-          <div class="tags"><span>공간</span><span>[공간]</span></div>
-        </a></li>
-      </ul>
-      <a class="more" href="records/index.html">모든 기록 보기 →</a>
-    </div>
-  </section>
-
-  <section id="products">
-    <div class="wrap">
-      <div class="label">Products</div>
-      <h2>기록에서 이어지는 원두</h2>
-      <div class="grid three">
-        <a class="card" href="#">
-          <div class="ph" style="background-image:url('images/product1.jpg')"></div>
-          <small>관련 기록 No. 001</small>
-          <h3>[원두 이름 1]</h3>
-          <p>[향미 노트 · 용량 · 가격]</p>
-        </a>
-        <a class="card" href="#">
-          <div class="ph" style="background-image:url('images/product2.jpg')"></div>
-          <small>관련 기록 No. 002</small>
-          <h3>[원두 이름 2]</h3>
-          <p>[향미 노트 · 용량 · 가격]</p>
-        </a>
-        <a class="card" href="#">
-          <div class="ph" style="background-image:url('images/product3.jpg')"></div>
-          <small>관련 기록 No. 003</small>
-          <h3>[드립백 / 굿즈]</h3>
-          <p>[설명 · 가격]</p>
-        </a>
+    <section id="coffee" class="coffee-section section-wrap section-line">
+      <div class="section-heading">
+        <p class="eyebrow">01 / COFFEE</p>
+        <h2>A closer look<br>at <em>coffee.</em></h2>
       </div>
-      <a class="more" href="[스마트스토어 주소]">구매하러 가기 →</a>
-    </div>
-  </section>
-
-  <section id="space">
-    <div class="wrap">
-      <div class="label">Space</div>
-      <h2>커피를 마시는 자리</h2>
-      <p class="lead" style="margin-bottom:32px">[공간 소개 2~3문장: 인테리어 콘셉트, 좌석, 분위기]</p>
-      <div class="grid two">
-        <div class="card"><div class="ph" style="background-image:url('images/space1.jpg')"></div></div>
-        <div class="card"><div class="ph" style="background-image:url('images/space2.jpg')"></div></div>
+      <div class="coffee-content">
+        <p class="section-intro">매일의 커피를 위한 자리. GIROK의 메뉴와 커피 이야기를 이곳에 차곡차곡 소개합니다.</p>
+        <div class="coffee-photo-grid">
+          <figure class="detail-photo detail-photo-large">
+            <img src="assets/girok-interior.webp" alt="GIROK 커피 바와 추출 장비" loading="lazy">
+            <figcaption><span>COFFEE BAR</span><span>01</span></figcaption>
+          </figure>
+          <div class="menu-note">
+            <span class="eyebrow">THE MENU</span>
+            <h3>Made for<br>your daily ritual.</h3>
+            <p>메뉴와 가격은 최신 정보 확인 후 업데이트할 예정입니다.</p>
+            <span class="small-rule"></span>
+            <span class="note-index">MENU INFORMATION — COMING SOON</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="visit">
-    <div class="wrap">
-      <div class="label">Visit</div>
-      <h2>오시는 길</h2>
-      <dl class="info">
-        <dt>ADDRESS</dt><dd>[인천광역시 ○○구 ○○로 00]</dd>
-        <dt>HOURS</dt>
-        <dd>
-          <table class="hours">
-            <tr><th>월 · 수 · 목 · 금 · 토</th><td>09:00 – 21:00<small>Last order 20:50</small></td></tr>
-            <tr><th>화</th><td>09:00 – 17:00<small>Last order 16:50</small></td></tr>
-            <tr><th>일</th><td>12:30 – 20:00<small>Last order 19:50</small></td></tr>
-          </table>
-          <p class="notice">정기 휴무일은 없으며, 휴무 시 미리 공지합니다.</p>
-        </dd>
-        <dt>PARKING</dt><dd>[주차 안내]</dd>
-        <dt>CONTACT</dt><dd>[010-0000-0000]</dd>
-      </dl>
-      <div class="btns">
-        <a class="btn dark" href="https://naver.me/IgMTh9Qe" target="_blank" rel="noopener">네이버 지도</a>
-        <a class="btn dark" href="https://www.instagram.com/girok.coffee/" target="_blank" rel="noopener">Instagram</a>
+    <section id="space" class="space-section section-wrap section-line">
+      <div class="space-top">
+        <div>
+          <p class="eyebrow">02 / SPACE & JOURNAL</p>
+          <h2>Objects, light,<br><em>and atmosphere.</em></h2>
+        </div>
+        <p class="space-description">나무의 결, 선반 위 오브젝트, 커피를 만드는 순간. 공간을 이루는 작은 장면들을 기록합니다.</p>
       </div>
-    </div>
-  </section>
+      <figure class="space-image">
+        <img src="assets/girok-interior.webp" alt="GIROK 매장 선반과 스피커, 커피 바의 풍경" loading="lazy">
+        <figcaption><span>SPACE STUDY / 001</span><span>WOOD · OBJECTS · COFFEE</span></figcaption>
+      </figure>
+      <div class="journal-footer"><span>AN ONGOING ARCHIVE</span><span>기록은 사진과 공간의 장면으로부터 시작됩니다.</span></div>
+    </section>
 
-</main>
+    <section id="visit" class="visit-section section-wrap section-line">
+      <div class="visit-title">
+        <p class="eyebrow">03 / VISIT</p>
+        <h2>Find your way<br>to <em>GIROK.</em></h2>
+      </div>
+      <div class="visit-details">
+        <div class="visit-row"><span class="eyebrow">ADDRESS</span><p>인천 검단구 고산후로 97<br>1층 104호</p><small>게시 전 공식 도로명주소 확인 필요</small></div>
+        <div class="visit-row"><span class="eyebrow">OPENING HOURS</span><p>매장 운영시간</p><small>확정된 요일별 시간 입력 필요</small></div>
+        <div class="visit-row"><span class="eyebrow">FOLLOW</span><p><a href="https://www.instagram.com/girok.coffee/" target="_blank" rel="noreferrer">Instagram ↗</a></p></div>
+      </div>
+    </section>
+  </main>
 
-<footer>
-  <div class="wrap">
-    <strong>girok</strong>
-    <span>[상호명] · 대표 [이름] · 사업자등록번호 [000-00-00000]</span>
-    <span>[주소] · [전화번호]</span>
-    <span><a href="https://www.instagram.com/girok.coffee/" target="_blank" rel="noopener">@girok.coffee</a></span>
-    <span>© 2026 girok. All rights reserved.</span>
-  </div>
-</footer>
-
+  <footer class="site-footer section-wrap">
+    <a class="footer-wordmark" href="#top">girok<span>coffee</span></a>
+    <p>COFFEE · SPACE · EVERYDAY MOMENTS</p>
+    <a href="#top" class="back-top">BACK TO TOP ↑</a>
+    <small>© <span id="year"></span> GIROK COFFEE. ALL RIGHTS RESERVED.</small>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>

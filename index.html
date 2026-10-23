@@ -33,13 +33,16 @@ nav ul{display:flex;gap:22px;list-style:none;font-size:14px}
 nav a:hover{color:var(--accent)}
 
 /* hero */
-.hero{min-height:82vh;display:flex;align-items:center;border-top:none;
-  background:linear-gradient(rgba(28,26,23,.45),rgba(28,26,23,.45)),url('images/hero.jpg') center/cover #3a332b;color:#fff}
-.hero h1{font-size:clamp(40px,9vw,88px);letter-spacing:.06em;font-weight:700;line-height:1.1}
-.hero p{margin-top:20px;font-size:clamp(15px,2.2vw,18px);max-width:460px;opacity:.9}
+.hero{
+  min-height:88vh;
+  padding:0;
+  border-top:none;
+  background:url('images/hero.jpg') center/cover no-repeat #3a332b;
+}
+
+/* buttons */
 .btns{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap}
 .btn{padding:13px 26px;border:1px solid currentColor;font-size:14px;transition:.2s}
-.btn:hover{background:#fff;color:var(--ink)}
 .btn.dark:hover{background:var(--ink);color:#fff}
 
 /* records */
@@ -61,9 +64,14 @@ nav a:hover{color:var(--accent)}
 .card small{font-size:12px;color:var(--accent)}
 
 /* visit */
-.info{display:grid;gap:12px;font-size:15px;margin-top:8px}
+.info{display:grid;gap:12px;font-size:15px;margin-top:8px;max-width:520px}
 .info dt{font-size:12px;color:var(--sub);letter-spacing:.1em}
 .info dd{margin-bottom:10px}
+.hours{border-collapse:collapse;width:100%;font-size:15px}
+.hours th,.hours td{padding:10px 0;border-bottom:1px solid var(--line);text-align:left;font-weight:400;vertical-align:top}
+.hours th{color:var(--sub);width:46%;padding-right:12px}
+.hours small{display:block;font-size:12px;color:var(--sub)}
+.notice{font-size:13px;color:var(--accent);margin-top:10px}
 
 footer{padding:40px 0;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
 footer .wrap{display:flex;flex-direction:column;gap:6px}
@@ -73,7 +81,12 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
   .grid.two{grid-template-columns:repeat(2,1fr)}
   .split{display:grid;grid-template-columns:1fr 1fr;gap:64px}
 }
-@media(max-width:600px){nav ul{gap:14px;font-size:13px}.records a{grid-template-columns:1fr}.tags{grid-column:1}}
+@media(max-width:600px){
+  nav ul{gap:14px;font-size:13px}
+  .records a{grid-template-columns:1fr}
+  .tags{grid-column:1}
+  .hero{min-height:70vh}
+}
 </style>
 </head>
 <body>
@@ -95,10 +108,7 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
 
 <main id="top">
 
-  <section class="hero">
-    <div class="wrap">
-    </div>
-  </section>
+  <section class="hero" role="img" aria-label="girok 카페 대표 사진"></section>
 
   <section id="about">
     <div class="wrap split">
@@ -176,30 +186,27 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
   </section>
 
   <section id="visit">
-    <div class="wrap split">
-      <div>
-        <div class="label">Visit</div>
-        <h2>오시는 길</h2>
-        <dl class="info">
-          <dt>ADDRESS</dt><dd>[인천광역시 ○○구 ○○로 00]</dd>
-          <dt>HOURS</dt>
-<dd>
-  <table class="hours">
-    <tr><th>월 · 수 · 목 · 금 · 토</th><td>09:00 – 21:00<small>Last order 20:50</small></td></tr>
-    <tr><th>화</th><td>09:00 – 17:00<small>Last order 16:50</small></td></tr>
-    <tr><th>일</th><td>12:30 – 20:00<small>Last order 19:50</small></td></tr>
-  </table>
-  <p class="notice">정기 휴무일은 없으며, 휴무 시 미리 공지합니다.</p>
-</dd>
-          <dt>PARKING</dt><dd>[주차 안내]</dd>
-          <dt>CONTACT</dt><dd>[010-0000-0000]</dd>
-        </dl>
-        <div class="btns">
-          <a class="btn dark" href="https://naver.me/IgMTh9Qe">네이버 지도</a>
-          <a class="btn dark" href="https://www.instagram.com/girok.coffee/">Instagram</a>
-        </div>
+    <div class="wrap">
+      <div class="label">Visit</div>
+      <h2>오시는 길</h2>
+      <dl class="info">
+        <dt>ADDRESS</dt><dd>[인천광역시 ○○구 ○○로 00]</dd>
+        <dt>HOURS</dt>
+        <dd>
+          <table class="hours">
+            <tr><th>월 · 수 · 목 · 금 · 토</th><td>09:00 – 21:00<small>Last order 20:50</small></td></tr>
+            <tr><th>화</th><td>09:00 – 17:00<small>Last order 16:50</small></td></tr>
+            <tr><th>일</th><td>12:30 – 20:00<small>Last order 19:50</small></td></tr>
+          </table>
+          <p class="notice">정기 휴무일은 없으며, 휴무 시 미리 공지합니다.</p>
+        </dd>
+        <dt>PARKING</dt><dd>[주차 안내]</dd>
+        <dt>CONTACT</dt><dd>[010-0000-0000]</dd>
+      </dl>
+      <div class="btns">
+        <a class="btn dark" href="https://naver.me/IgMTh9Qe" target="_blank" rel="noopener">네이버 지도</a>
+        <a class="btn dark" href="https://www.instagram.com/girok.coffee/" target="_blank" rel="noopener">Instagram</a>
       </div>
-      <div class="card"><div class="ph" style="background-image:url('images/map.jpg');aspect-ratio:1/1"></div></div>
     </div>
   </section>
 
@@ -210,6 +217,7 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
     <strong>girok</strong>
     <span>[상호명] · 대표 [이름] · 사업자등록번호 [000-00-00000]</span>
     <span>[주소] · [전화번호]</span>
+    <span><a href="https://www.instagram.com/girok.coffee/" target="_blank" rel="noopener">@girok.coffee</a></span>
     <span>© 2026 girok. All rights reserved.</span>
   </div>
 </footer>

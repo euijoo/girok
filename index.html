@@ -13,6 +13,8 @@
 :root{
   --bg:#f5f1ea; --ink:#1c1a17; --sub:#6f685e; --line:#d9d2c5; --accent:#8a5a3b;
   --max:1080px;
+  /* 히어로 사진: 내 사진은 images/hero.jpg, 임시 사진은 Unsplash 주소로 교체 */
+  --hero-img:url('images/hero.jpg');
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -20,24 +22,41 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--ink);l
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-section{padding:88px 0;border-top:1px solid var(--line)}
+section{padding:88px 0;border-top:1px solid var(--line);scroll-margin-top:60px}
 .label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
 h2{font-size:clamp(24px,4vw,34px);font-weight:600;line-height:1.35;margin-bottom:24px}
 p.lead{color:var(--sub);max-width:560px}
 
 /* header */
-header{position:sticky;top:0;z-index:10;background:rgba(245,241,234,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{
+  position:fixed;top:0;left:0;right:0;z-index:10;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  color:#fff;
+  transition:background .35s ease,color .35s ease,border-color .35s ease;
+}
+header.scrolled,header.open{
+  background:rgba(245,241,234,.94);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border-bottom-color:var(--line);
+  color:var(--ink);
+}
 .nav{display:flex;justify-content:space-between;align-items:center;height:60px}
 .logo{font-size:20px;font-weight:700;letter-spacing:.08em}
 nav ul{display:flex;gap:22px;list-style:none;font-size:14px}
-nav a:hover{color:var(--accent)}
+nav a{transition:color .2s,opacity .2s}
+header.scrolled nav a:hover,header.open nav a:hover{color:var(--accent)}
+header:not(.scrolled):not(.open) nav a:hover{opacity:.7}
 
 /* hero */
 .hero{
   min-height:88vh;
   padding:0;
   border-top:none;
-  background:url('images/hero.jpg') center/cover no-repeat #3a332b;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 140px),
+    var(--hero-img) center/cover no-repeat #3a332b;
 }
 
 /* buttons */
@@ -169,7 +188,7 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
           <p>[설명 · 가격]</p>
         </a>
       </div>
-      <a class="more" href="[스마트스토어 주소]">구매하러 가기 →</a>
+      <a class="more" href="#">구매하러 가기 →</a>
     </div>
   </section>
 
@@ -221,6 +240,24 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
     <span>© 2026 girok. All rights reserved.</span>
   </div>
 </footer>
+
+<script>
+(function(){
+  var header=document.querySelector('header');
+  function update(){
+    header.classList.toggle('scrolled',window.scrollY>40);
+  }
+  update();
+  window.addEventListener('scroll',update,{passive:true});
+
+  document.querySelectorAll('nav a, .logo').forEach(function(a){
+    a.addEventListener('click',function(){
+      header.classList.add('open');
+      setTimeout(function(){header.classList.remove('open');},1200);
+    });
+  });
+})();
+</script>
 
 </body>
 </html>

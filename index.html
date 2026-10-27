@@ -51,12 +51,21 @@ header:not(.scrolled):not(.open) nav a:hover{opacity:.7}
 
 /* hero */
 .hero{
+  position:relative;
+  overflow:hidden;
   min-height:88vh;
   padding:0;
   border-top:none;
-  background:
-    linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 140px),
-    var(--hero-img) center/cover no-repeat #3a332b;
+  background:var(--hero-img) center/cover no-repeat #3a332b;
+}
+.hero video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 140px);
 }
 
 /* buttons */
@@ -127,7 +136,9 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
 
 <main id="top">
 
-  <section class="hero" role="img" aria-label="girok 카페 대표 사진"></section>
+  <section class="hero" aria-label="girok 카페 소개 영상">
+  <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="images/hero.jpg"></video>
+</section>
 
   <section id="about">
     <div class="wrap split">
@@ -256,6 +267,27 @@ footer .wrap{display:flex;flex-direction:column;gap:6px}
       setTimeout(function(){header.classList.remove('open');},1200);
     });
   });
+  var video=document.getElementById('heroVideo');
+  var mq=window.matchMedia('(max-width:600px)');
+  function loadHero(){
+    var src=mq.matches?'images/mobile_hero.mp4':'images/desktop_hero.mp4';
+    if(video.getAttribute('data-src')===src) return;
+    video.setAttribute('data-src',src);
+    video.src=src;
+    video.load();
+    var p=video.play();
+    if(p&&p.catch) p.catch(function(){});
+  }
+  loadHero();
+    if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){var p=video.play();if(p&&p.catch)p.catch(function(){});}
+        else{video.pause();}
+      });
+    },{threshold:.1}).observe(video);
+  }
+  if(mq.addEventListener) mq.addEventListener('change',loadHero);
 })();
 </script>
 
